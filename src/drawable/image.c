@@ -13,10 +13,14 @@ nil image_free (ptr * data) {
 drawable_t * image_new (str path) {
 	drawable_t * image = malloc (sizeof (drawable_t));
 	SDL_Surface * surface = IMG_Load (path);
+	
 	if (not surface) {
-		LOG_ERR ("image_new: ", (str) SDL_GetError ());
+		log_init ("image_new");
+		LOG_ERR ("IMG_Load: ", (str) SDL_GetError ());
+		log_quit ();
 		quit ();
 	}
+	
 	image -> data = malloc (sizeof (SDL_Texture * [1]));
 	image -> data [0] = texture_from_surface (surface);
 	image -> w = surface -> w;
@@ -24,6 +28,7 @@ drawable_t * image_new (str path) {
 	SDL_FreeSurface (surface);
 	image -> draw = image_draw;
 	image -> free = image_free;
+	
 	return image;
 }
 

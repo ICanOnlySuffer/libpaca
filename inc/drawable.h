@@ -18,6 +18,7 @@ extern nil drawable_center_y (drawable_t * drawable);
 stainl nil drawable_draw (drawable_t * drawable) {
 	drawable -> draw (drawable);
 }
+extern nil drawable_free_vec (vec * drawables);
 stainl nil drawable_free (drawable_t * drawable) {
 	drawable -> free (drawable -> data);
 	free (drawable);
