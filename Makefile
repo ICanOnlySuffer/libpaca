@@ -48,8 +48,7 @@ DIRS_OBJ = $(DIRS_SRC:src/%=$(DIR_OBJ)/%/)
 SRC = $(shell find src -name '*.c')
 OBJ = $(SRC:src/%.c=$(DIR_OBJ)/%.o)
 
-C_LINKS = $(addprefix -l, SDL2 SDL2_ttf SDL2_image)
-C_FLAGS = -O3 -Iinc/ $(C_LINKS) -DVERSION='$(VERSION)'
+C_FLAGS = -O3
 
 LIB = $(DIR_LIB)/pul/{str,put,vec}.o
 
@@ -61,7 +60,7 @@ $(DIR_OBJ)/%.o: src/%.c
 
 all: $(DIRS_OBJ) $(OBJ)
 
-install: all $(DIRS)
+install: all uninstall $(DIRS)
 	cp -ru inc/* $(DIR_INSTALL_INC)/pge
 	cp -ru $(DIR_OBJ)/* $(DIR_INSTALL_LIB)/pge
 	cp -u bin/pge $(DIR_INSTALL_BIN)/

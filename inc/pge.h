@@ -9,7 +9,8 @@
 # include <SDL2/SDL.h>
 # include <pul/vec.h>
 # include <pul/put.h>
-# include "debug.h"
+# include "vectors.h"
+# include "font.h"
 
 # define KEY_ARROW_UP    1073741906
 # define KEY_ARROW_DOWN  1073741905
@@ -28,11 +29,6 @@ extern struct window {
 	u16 height;
 	u08 delay;
 } window;
-
-extern TTF_Font * FONT;
-extern vec ON_UPDATE;
-extern vec ON_EVENT;
-extern vec AT_QUIT;
 
 extern u08 run;
 

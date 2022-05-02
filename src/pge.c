@@ -2,23 +2,22 @@
 
 struct window window;
 
-TTF_Font * FONT;
-vec ON_UPDATE;
-vec ON_EVENT;
-vec AT_QUIT;
-
 u08 run = true;
 
 nil init (str title, u16 width, u16 height, u08 delay) {
-	log_init ("init");
-	LOG ("SDL_Init");
+	log_init ();
+	proc_init ("init");
+	font_init ();
+	vectors_init ();
+	
+	LOG ("SDL.init");
 	if (SDL_Init (SDL_INIT_VIDEO)) {
 		LOG_ERR ("SDL_Init: ", (str) SDL_GetError ());
-		log_quit ();
+		proc_quit ();
 		exit (1);
 	}
 	
-	LOG ("SDL_CreateWindow");
+	LOG ("window.window = SDL.create_window");
 	window.window = SDL_CreateWindow (
 		title,
 		SDL_WINDOWPOS_CENTERED,
@@ -28,23 +27,23 @@ nil init (str title, u16 width, u16 height, u08 delay) {
 		0
 	);
 	if (not window.window) {
-		LOG_ERR ("SDL_CreateWindow: ", (str) SDL_GetError ());
-		log_quit ();
+		LOG_ERR ((str) SDL_GetError ());
+		proc_quit ();
 		SDL_Quit ();
 		exit (1);
 	}
 	
-	LOG ("SDL_CreateRenderer");
+	LOG ("window.renderer = SDL.create_renderer");
 	window.renderer = SDL_CreateRenderer (window.window, -1, 2);
 	if (not window.renderer) {
-		LOG_ERR ("SDL_CreateRenderer: ", (str) SDL_GetError ());
+		LOG_ERR ((str) SDL_GetError ());
 		SDL_DestroyWindow (window.window);
-		log_quit ();
 		SDL_Quit ();
+		proc_quit ();
 		exit (1);
 	}
 	
-	LOG ("SDL_CreateTexture");
+	LOG ("window.texture = SDL.create_texture");
 	window.texture = SDL_CreateTexture (
 		window.renderer,
 		SDL_PIXELFORMAT_RGBA8888,
@@ -53,73 +52,56 @@ nil init (str title, u16 width, u16 height, u08 delay) {
 		height
 	);
 	if (not window.texture) {
-		LOG_ERR ("SDL_CreateTexture: ", (str) SDL_GetError ());
+		LOG_ERR ((str) SDL_GetError ());
 		SDL_DestroyRenderer (window.renderer);
 		SDL_DestroyWindow (window.window);
-		log_quit ();
 		SDL_Quit ();
+		proc_quit ();
 		exit (1);
 	}
-	
-	LOG ("TTF_Init");
-	TTF_Init ();
-	
-	ON_UPDATE = VEC (4);
-	ON_EVENT = VEC (4);
-	AT_QUIT = VEC (4);
 	
 	window.width = width;
 	window.height = height;
 	window.delay = delay;
 	
-	log_quit ();
+	proc_quit ();
 }
 
 nil quit () {
-	log_init ("quit");
+	proc_init ("quit");
 	LOG ("destroying renderer...");
 	SDL_DestroyRenderer (window.renderer);
 	LOG ("destroying texture...");
 	SDL_DestroyTexture (window.texture);
 	LOG ("destroying window...");
 	SDL_DestroyWindow (window.window);
-	LOG ("running at_quit...");
-	log_init ("at_quit");
-	for (u08 i = 0; i < AT_QUIT.size; i++) {
-		((nil (*) (nil)) AT_QUIT.items [i]) ();
-	}
-	log_quit ();
-	LOG ("freeing vectors...");
-	free (ON_UPDATE.items);
-	free (ON_EVENT.items);
-	free (AT_QUIT.items);
+	
+	vectors_at_quit ();
+	vectors_quit ();
+	
 	LOG ("quitting SDL...");
+	font_quit ();
 	SDL_Quit ();
-	TTF_Quit ();
+	proc_quit ();
 	log_quit ();
-	free (log_mods.items);
 }
 
 nil loop () {
-	log_init ("mainloop");
+	proc_init ("mainloop");
 	SDL_Event event;
 	do {
 		set_render_target (window.texture);
 		render_clear ();
 		while (SDL_PollEvent (&event)) {
-			for (u08 i = 0; i < ON_EVENT.size; i++) {
-				((nil (*) (SDL_Event *)) ON_EVENT.items [i]) (&event);
-			}
+			vectors_on_event (&event);
 		}
-		for (u08 i = 0; i < ON_UPDATE.size; i++) {
-			((nil (*) ()) ON_UPDATE.items [i]) ();
-		}
+		vectors_on_update ();
 		set_render_target (NIL);
 		render_copy (window.texture, NIL);
 		render ();
 		SDL_Delay (window.delay);
 	} while (run);
-	log_quit ();
+	proc_quit ();
 	quit ();
 }
 

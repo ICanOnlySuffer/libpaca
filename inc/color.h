@@ -1,7 +1,8 @@
 
 # ifndef PGE_COLOR_H
 # define PGE_COLOR_H
-# include "pge.h"
+# define SDL_MAIN_HANDLED
+# include <SDL2/SDL_pixels.h>
 
 extern SDL_Color COLORS [];
 

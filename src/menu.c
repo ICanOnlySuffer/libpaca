@@ -1,15 +1,18 @@
 # include "../inc/menu.h"
 
-nil menu_log (menu_t * menu, str string) {
-	put_spaces ();
-	PUT ("\e[35m<", menu -> name, "> ", string, "\e[0m\n");
-}
-
 nil menu_activate (menu_t * menu) {
+	chr buffer [32];
+	STR_CPY (buffer, menu -> name, ".activate");
+	proc_init (buffer);
 	menu -> activate ();
+	proc_quit ();
 }
 
 nil menu_deactivate (menu_t * menu) {
+	chr buffer [32];
+	STR_CPY (buffer, menu -> name, ".deactivate");
+	proc_init (buffer);
 	menu -> deactivate ();
+	proc_quit ();
 }
 

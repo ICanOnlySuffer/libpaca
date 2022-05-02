@@ -15,9 +15,7 @@ drawable_t * image_new (str path) {
 	SDL_Surface * surface = IMG_Load (path);
 	
 	if (not surface) {
-		log_init ("image_new");
 		LOG_ERR ("IMG_Load: ", (str) SDL_GetError ());
-		log_quit ();
 		quit ();
 	}
 	
