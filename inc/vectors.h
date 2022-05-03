@@ -9,7 +9,7 @@ extern vec ON_UPDATE;
 extern vec ON_EVENT;
 extern vec AT_QUIT;
 
-extern vec vector_new (str name, u08 size);
+extern vec vector_new (str name, u64 size);
 extern nil vector_free (str name, vec * vector);
 
 extern nil vector_psh (str vec_, vec * vector, str fun_, ptr fun);

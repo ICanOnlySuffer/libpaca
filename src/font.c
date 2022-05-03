@@ -3,35 +3,34 @@
 static vec FONTS;
 
 nil font_close (TTF_Font * font) {
-	if (font) {
-		LOG ("Font.close");
-		TTF_CloseFont (font);
-	}
+	LOG ("Font.close font", NIL);
+	TTF_CloseFont (font);
 }
 
 nil font_quit () {
-	proc_init ("Font.quit");
+	str proc = "Font.quit";
+	proc_init (proc);
 	for (u08 i = 0; i < FONTS.size; i++) {
-		font_close (FONTS.items [0]);
+		font_close (FONTS.items [i]);
 	}
-	proc_quit ();
+	LOG ("FONT.items.free", NIL);
+	free (FONTS.items);
+	proc_quit (proc);
 }
 
 nil font_init () {
-	proc_init ("Font.init");
+	str proc = "Font.init";
+	proc_init (proc);
 	TTF_Init ();
-	FONTS = vector_new ("fonts", 4);
+	FONTS = vector_new ("FONTS", 4);
 	at_quit_psh ("Font.quit", font_quit);
-	proc_quit ();
+	proc_quit (proc);
 }
 
-TTF_Font * font_open (str path, u08 size) {
-	chr buffer [64];
-	chr size_str [4];
-	str_frm_u64 (size_str, (u64) size);
-	STR_CPY (buffer, "Font.open \"", path, "\", ", size_str);
+TTF_Font * font_open (str path, u64 size) {
+	LOG ("font = Font.open \"%s\", %u", path, &size);
 	TTF_Font * font = TTF_OpenFont (path, size);
-	vector_psh ("FONTS", &FONTS, buffer, font);
+	vector_psh ("FONTS", &FONTS, "font", font);
 	return font;
 }
 

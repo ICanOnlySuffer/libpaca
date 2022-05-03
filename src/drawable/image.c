@@ -7,7 +7,6 @@ nil image_draw (drawable_t * image) {
 
 nil image_free (ptr * data) {
 	SDL_DestroyTexture (data [0]);
-	free (data);
 }
 
 drawable_t * image_new (str path) {

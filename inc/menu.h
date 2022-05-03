@@ -11,16 +11,9 @@ typedef struct {
 
 extern nil menu_activate (menu_t * menu);
 extern nil menu_deactivate (menu_t * menu);
-
-# define MENU_LOG(menu_, ...) \
-	PUT ( \
-		LOG_SPACES, \
-		"\e[35m<", \
-		menu_.name, \
-		"> ", \
-		__VA_ARGS__, \
-		"\e[0m\n" \
-	)
+stainl nil menu_log (menu_t * menu, str string) {
+	LOG ("\e[35m<%s> %s", menu -> name, string);
+}
 
 # endif // PGE_MENU_H
 

@@ -5,7 +5,7 @@ nil button_draw (drawable_t * button) {
 }
 
 nil button_free (ptr * data) {
-	SDL_DestroyTexture (data [0]);
+	// SDL_DestroyTexture (data [0]);
 }
 
 drawable_t * button_new (
@@ -52,6 +52,6 @@ nil button_unselect (drawable_t * button) {
 }
 
 nil button_press (drawable_t * button) {
-	((nil (*) ()) button -> data [0]) ();
+	((nil (*) ()) button -> data [5]) ();
 }
 

@@ -48,7 +48,7 @@ DIRS_OBJ = $(DIRS_SRC:src/%=$(DIR_OBJ)/%/)
 SRC = $(shell find src -name '*.c')
 OBJ = $(SRC:src/%.c=$(DIR_OBJ)/%.o)
 
-C_FLAGS = -O3
+C_FLAGS = -O3 -Wall
 
 LIB = $(DIR_LIB)/pul/{str,put,vec}.o
 

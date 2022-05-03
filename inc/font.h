@@ -9,7 +9,7 @@
 extern nil font_close (TTF_Font * font);
 extern nil font_quit ();
 extern nil font_init ();
-extern TTF_Font * font_open (str path, u08 size);
+extern TTF_Font * font_open (str path, u64 size);
 
 # endif // PGE_FONT_H
 

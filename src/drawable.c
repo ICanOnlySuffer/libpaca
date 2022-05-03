@@ -1,17 +1,17 @@
 # include "../inc/drawable.h"
 
 nil drawable_center_x (drawable_t * drawable) {
-	drawable -> x = (window.width - drawable -> w) / 2;
+	drawable -> x = (WINDOW.width - drawable -> w) / 2;
 }
 
 nil drawable_center_y (drawable_t * drawable) {
-	drawable -> y = (window.height - drawable -> h) / 2;
+	drawable -> y = (WINDOW.height - drawable -> h) / 2;
 }
 
 nil drawable_free (drawable_t * drawable) {
 	drawable -> free (drawable -> data);
 	free (drawable -> data);
-	free (drawable);;
+	free (drawable);
 }
 
 nil drawable_free_vec (vec * drawables) {

@@ -10,6 +10,7 @@
 # include <pul/vec.h>
 # include <pul/put.h>
 # include "vectors.h"
+# include "window.h"
 # include "font.h"
 
 # define KEY_ARROW_UP    1073741906
@@ -21,40 +22,11 @@
 # define KEY_ESCAPE      27
 # define KEY_ENTER       13
 
-extern struct window {
-	SDL_Window * window;
-	SDL_Renderer * renderer;
-	SDL_Texture * texture;
-	u16 width;
-	u16 height;
-	u08 delay;
-} window;
-
 extern u08 run;
 
-extern nil init (str title, u16 width, u16 height, u08 delay);
+extern nil init (str title, u16 width, u16 height, u64 delay);
 extern nil loop ();
 extern nil quit ();
-
-stainl SDL_Texture * texture_from_surface (SDL_Surface * surface) {
-	return SDL_CreateTextureFromSurface (window.renderer, surface);
-}
-
-stainl nil set_render_target (SDL_Texture * texture) {
-	SDL_SetRenderTarget (window.renderer, texture);
-}
-
-stainl nil render_clear () {
-	SDL_RenderClear (window.renderer);
-}
-
-stainl nil render_copy (SDL_Texture * texture, SDL_Rect * rect) {
-	SDL_RenderCopy (window.renderer, texture, NIL, rect);
-}
-
-stainl nil render () {
-	SDL_RenderPresent (window.renderer);
-}
 
 # endif // PGE_H
 
