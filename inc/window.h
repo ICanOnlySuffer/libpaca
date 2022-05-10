@@ -2,38 +2,38 @@
 # ifndef PGE_WINDOW_H
 # define PGE_WINDOW_H
 # define SDL_MAIN_HANDLED
-# include <SDL2/SDL_main.h>
-# include <SDL2/SDL.h>
+# include <SDL2/SDL_video.h>
+# include <SDL2/SDL_image.h>
 # include "log.h"
 
 extern struct window {
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	SDL_Texture * texture;
-	u16 width;
-	u16 height;
+	u16 w;
+	u16 h;
 } WINDOW;
 
 extern nil window_init (str name, u64 width, u64 height);
 extern nil window_quit ();
 
-stainl SDL_Texture * texture_from_surface (SDL_Surface * surface) {
+inl SDL_Texture * texture_from_surface (SDL_Surface * surface) {
 	return SDL_CreateTextureFromSurface (WINDOW.renderer, surface);
 }
 
-stainl nil set_render_target (SDL_Texture * texture) {
+inl nil set_render_target (SDL_Texture * texture) {
 	SDL_SetRenderTarget (WINDOW.renderer, texture);
 }
 
-stainl nil render_clear () {
+inl nil render_clear () {
 	SDL_RenderClear (WINDOW.renderer);
 }
 
-stainl nil render_copy (SDL_Texture * texture, SDL_Rect * rect) {
+inl nil render_copy (SDL_Texture * texture, SDL_Rect * rect) {
 	SDL_RenderCopy (WINDOW.renderer, texture, NIL, rect);
 }
 
-stainl nil render () {
+inl nil render () {
 	SDL_RenderPresent (WINDOW.renderer);
 }
 

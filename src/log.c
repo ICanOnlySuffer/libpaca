@@ -1,4 +1,7 @@
+# include "../inc/vectors.h"
 # include "../inc/log.h"
+# include <pul/put.h>
+# include <pul/vec.h>
 
 chr LOG_SPACES [] = "\0                               ";
 static u08 n_spaces = 0;
@@ -13,8 +16,8 @@ static nil dec_spaces () {
 	LOG_SPACES [--n_spaces * 2] = 0;
 }
 
-nil log_format (u08 error, str format, ptr pointers []) {
-	chr buffer [64];
+nil log_format (u08 error, str format, u64 pointers []) {
+	chr buffer [128];
 	str_frm_fmt (buffer, format, pointers);
 	PUT (LOG_SPACES, error ? "\e[31m" : "\e[36m", buffer, "\e[0m\n");
 }

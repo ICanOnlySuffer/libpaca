@@ -1,11 +1,8 @@
 # include "../inc/drawable.h"
 
-nil drawable_center_x (drawable_t * drawable) {
-	drawable -> x = (WINDOW.width - drawable -> w) / 2;
-}
-
-nil drawable_center_y (drawable_t * drawable) {
-	drawable -> y = (WINDOW.height - drawable -> h) / 2;
+nil drawable_set_position (drawable_t * drawable, s16 x, s16 y) {
+	drawable -> x = x == CENTER ? (WINDOW.w - drawable -> w) / 2 : x;
+	drawable -> y = y == CENTER ? (WINDOW.h - drawable -> h) / 2 : y;
 }
 
 nil drawable_free (drawable_t * drawable) {
@@ -26,14 +23,15 @@ nil drawable_free_arr (u08 length, drawable_t * drawables []) {
 	}
 }
 
-nil drawable_extract (
-	drawable_t * drawable,
-	u08 index,
-	SDL_Surface * surface
+nil surface_extract (
+	SDL_Surface * surface,
+	u16 * width,
+	u16 * height,
+	SDL_Texture ** texture
 ) {
-	drawable -> data [index] = texture_from_surface (surface);
-	drawable -> w = surface -> w;
-	drawable -> h = surface -> h;
+	*texture = texture_from_surface (surface);
+	*width = surface -> w;
+	*height = surface -> h;
 	SDL_FreeSurface (surface);
 }
 

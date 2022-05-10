@@ -9,23 +9,23 @@ nil image_free (ptr * data) {
 	SDL_DestroyTexture (data [0]);
 }
 
-drawable_t * image_new (str path) {
+drawable_t * image_new (str path, s16 x, s16 y) {
 	drawable_t * image = malloc (sizeof (drawable_t));
 	SDL_Surface * surface = IMG_Load (path);
-	
 	if (not surface) {
-		LOG_ERR ("IMG_Load: ", (str) SDL_GetError ());
+		LOG_ERR ("image_new: %s", (u64) SDL_GetError ());
 		quit ();
 	}
-	
-	image -> data = malloc (sizeof (SDL_Texture * [1]));
-	image -> data [0] = texture_from_surface (surface);
-	image -> w = surface -> w;
-	image -> h = surface -> h;
-	SDL_FreeSurface (surface);
+	image -> data = malloc (sizeof (ptr));
+	surface_extract (
+		surface,
+		&image -> w,
+		&image -> h,
+		(SDL_Texture **) &image -> data [0]
+	);
+	drawable_set_position (image, x, y);
 	image -> draw = image_draw;
 	image -> free = image_free;
-	
 	return image;
 }
 

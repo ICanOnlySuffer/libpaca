@@ -2,10 +2,9 @@
 # ifndef PGE_DRAWABLE_TEXT_H
 # define PGE_DRAWABLE_TEXT_H
 # include "../drawable.h"
-# include "../color.h"
 # include "../font.h"
 
-stainl SDL_Surface * text_render (
+inl SDL_Surface * text_render (
 	str string,
 	TTF_Font * font,
 	SDL_Color * color
@@ -24,7 +23,9 @@ extern nil text_renew (
 extern drawable_t * text_new (
 	str string,
 	TTF_Font * font,
-	SDL_Color * color
+	SDL_Color * color,
+	s16 x,
+	s16 y
 );
 
 # endif // PGE_DRAWABLE_TEXT_H

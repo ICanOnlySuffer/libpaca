@@ -1,3 +1,4 @@
+# include "../inc/vectors.h"
 # include "../inc/window.h"
 
 struct window WINDOW;
@@ -5,11 +6,11 @@ struct window WINDOW;
 nil window_quit () {
 	str proc = "Window.quit";
 	proc_init (proc);
-	LOG ("WINDOW.renderer.destroy", NIL);
+	LOG ("WINDOW.renderer.destroy", 0);
 	SDL_DestroyRenderer (WINDOW.renderer);
-	LOG ("WINDOW.texture.destroy", NIL);
+	LOG ("WINDOW.texture.destroy", 0);
 	SDL_DestroyTexture (WINDOW.texture);
-	LOG ("WINDOW.window.destroy", NIL);
+	LOG ("WINDOW.window.destroy", 0);
 	SDL_DestroyWindow (WINDOW.window);	
 	proc_quit (proc);
 }
@@ -19,7 +20,7 @@ nil window_init (str name, u64 width, u64 height) {
 	proc_init (proc);
 	LOG (
 		"WINDOW.window = SDL.create_window \"%s\", %u, %u",
-		name, &width, &height
+		(u64) name, width, height
 	);
 	WINDOW.window = SDL_CreateWindow (
 		name,
@@ -30,16 +31,16 @@ nil window_init (str name, u64 width, u64 height) {
 		0
 	);
 	if (not WINDOW.window) {
-		LOG_ERR ("SDL.create_window: %s", (ptr) SDL_GetError ());
+		LOG_ERR ("SDL.create_window: %s", (u64) SDL_GetError ());
 		proc_quit (proc);
 		SDL_Quit ();
 		exit (1);
 	}
 	
-	LOG ("WINDOW.renderer = SDL.create_renderer", NIL);
+	LOG ("WINDOW.renderer = SDL.create_renderer", 0);
 	WINDOW.renderer = SDL_CreateRenderer (WINDOW.window, -1, 2);
 	if (not WINDOW.renderer) {
-		LOG_ERR ("SDL.create_renderer: %s", (ptr) SDL_GetError ());
+		LOG_ERR ("SDL.create_renderer: %s", (u64) SDL_GetError ());
 		SDL_DestroyWindow (WINDOW.window);
 		SDL_Quit ();
 		proc_quit (proc);
@@ -48,8 +49,8 @@ nil window_init (str name, u64 width, u64 height) {
 	
 	LOG (
 		"WINDOW.texture = SDL.create_texture WINDOW.renderer, %u, %u",
-		&width,
-		&height
+		width,
+		height
 	);
 	WINDOW.texture = SDL_CreateTexture (
 		WINDOW.renderer,
@@ -59,7 +60,7 @@ nil window_init (str name, u64 width, u64 height) {
 		height
 	);
 	if (not WINDOW.texture) {
-		LOG_ERR ("SDL.create_texture: %s", (ptr) SDL_GetError ());
+		LOG_ERR ("SDL.create_texture: %s", (u64) SDL_GetError ());
 		SDL_DestroyRenderer (WINDOW.renderer);
 		SDL_DestroyWindow (WINDOW.window);
 		SDL_Quit ();
@@ -67,8 +68,8 @@ nil window_init (str name, u64 width, u64 height) {
 		exit (1);
 	}
 	
-	WINDOW.width = width;
-	WINDOW.height = height;
+	WINDOW.w = width;
+	WINDOW.h = height;
 	
 	at_quit_psh ("Window.quit", window_quit);
 	

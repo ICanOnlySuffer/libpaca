@@ -1,21 +1,22 @@
 # include "../inc/vectors.h"
+# include "../inc/log.h"
 
 vec ON_UPDATE;
 vec ON_EVENT;
 vec AT_QUIT;
 
 vec vector_new (str name, u64 size) {
-	LOG ("%s = Vector.new %u", name, &size);
+	LOG ("%s = Vector.new %u", (u64) name, size);
 	return VEC ((u16) size);
 }
 
 nil vector_free (str name, vec * vector) {
-	LOG ("%s.items.free", name);
+	LOG ("%s.items.free", (u64) name);
 	free (vector -> items);
 }
 
 nil vector_psh (str vec_name, vec * vector, str fun_name, ptr fun) {
-	LOG ("%s.psh %s", vec_name, fun_name);
+	LOG ("%s.psh %s", (u64) vec_name, (u64) fun_name);
 	vec_psh (vector, fun);
 }
 
@@ -32,11 +33,11 @@ nil at_quit_psh (str fun_name, nil (* fun) ()) {
 }
 
 nil vector_rmv (str vec_name, vec * vector, str fun_name, ptr fun) {
-	LOG ("%s.rmv %s", vec_name, fun_name);
+	LOG ("%s.rmv %s", (u64) vec_name, (u64) fun_name);
 	if (vec_inc (vector, fun)) {
 		vec_rmv (vector, fun);
-	} {
-		LOG_ERR ("not %s.inc %s", vec_name, fun_name);
+	} else {
+		LOG_ERR ("not %s.inc %s", (u64) vec_name, (u64) fun_name);
 	}
 }
 
@@ -67,7 +68,7 @@ nil vectors_on_event (SDL_Event * event) {
 nil vectors_at_quit () {
 	str proc = "Vectors.at_quit";
 	proc_init (proc);
-	for (u08 i = 0; i < AT_QUIT.size; i++) {
+	for (u08 i = AT_QUIT.size - 1; i; i--) {
 		((nil (*) ()) AT_QUIT.items [i]) ();
 	}
 	proc_quit (proc);

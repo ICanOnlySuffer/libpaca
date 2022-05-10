@@ -1,19 +1,19 @@
+# include "../inc/vectors.h"
 # include "../inc/font.h"
+# include "../inc/log.h"
 
 static vec FONTS;
 
 nil font_close (TTF_Font * font) {
-	LOG ("Font.close font", NIL);
+	LOG ("Font.close font", 0);
 	TTF_CloseFont (font);
 }
 
 nil font_quit () {
 	str proc = "Font.quit";
 	proc_init (proc);
-	for (u08 i = 0; i < FONTS.size; i++) {
-		font_close (FONTS.items [i]);
-	}
-	LOG ("FONT.items.free", NIL);
+	vec_for_all (&FONTS, (nil (*) (ptr)) font_close);
+	LOG ("FONTS.items.free", 0);
 	free (FONTS.items);
 	proc_quit (proc);
 }
@@ -28,7 +28,7 @@ nil font_init () {
 }
 
 TTF_Font * font_open (str path, u64 size) {
-	LOG ("font = Font.open \"%s\", %u", path, &size);
+	LOG ("font = Font.open \"%s\", %u", (u64) path, size);
 	TTF_Font * font = TTF_OpenFont (path, size);
 	vector_psh ("FONTS", &FONTS, "font", font);
 	return font;
