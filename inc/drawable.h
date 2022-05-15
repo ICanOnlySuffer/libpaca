@@ -9,6 +9,9 @@
 
 # define CENTER -32768
 
+typedef SDL_Surface surface_t;
+typedef SDL_Texture texture_t;
+
 typedef struct drawable_t {
 	ptr * data;
 	s16 x;
@@ -27,10 +30,10 @@ ext nil drawable_free (drawable_t * drawable);
 ext nil drawable_free_vec (vec * drawables);
 ext nil drawable_free_arr (u08 length, drawable_t * drawables []);
 ext nil surface_extract (
-	SDL_Surface * surface,
+	surface_t * surface,
 	u16 * width,
 	u16 * height,
-	SDL_Texture ** texture
+	texture_t ** texture
 );
 ext nil drawable_render (drawable_t * drawable, u08 index);
 

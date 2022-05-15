@@ -2,22 +2,8 @@
 TITLE = "Pocha's Game Engine"
 VERSION = "v0.1.0"
 
-PLATFORM := all
+PLATFORM := gnu+linux
 
-ifeq ($(PLATFORM), all)
-all:
-	make PLATFORM=gnu+linux
-	make PLATFORM=mingw
-install:
-	make install DIR_INSTALL=$(DIR_INSTALL) PLATFORM=gnu+linux
-	make install DIR_INSTALL=$(DIR_INSTALL) PLATFORM=mingw
-uninstall:
-	make uninstall DIR_INSTALL=$(DIR_INSTALL) PLATFORM=gnu+linux
-	make uninstall DIR_INSTALL=$(DIR_INSTALL) PLATFORM=mingw
-clean:
-	make clean PLATFORM=gnu+linux
-	make clean PLATFORM=mingw	
-else
 ifeq ($(PLATFORM), gnu+linux)
 	DIR_INC = /usr/include
 	DIR_LIB = /usr/lib
@@ -72,6 +58,4 @@ uninstall:
 
 clean:
 	rm -rf $(DIR_OBJ)
-
-endif
 

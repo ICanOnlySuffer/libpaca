@@ -29,8 +29,12 @@ nil font_init () {
 
 TTF_Font * font_open (str path, u64 size) {
 	LOG ("font = Font.open \"%s\", %u", (u64) path, size);
-	TTF_Font * font = TTF_OpenFont (path, size);
-	vector_psh ("FONTS", &FONTS, "font", font);
+	font_t * font = TTF_OpenFont (path, size);
+	if (font) {
+		vector_psh ("FONTS", &FONTS, "font", font);
+	} else {
+		LOG_ERR ("SDL: %s", (u64) SDL_GetError ());
+	}
 	return font;
 }
 
