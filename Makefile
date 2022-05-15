@@ -5,57 +5,57 @@ VERSION = "v0.1.0"
 PLATFORM := gnu+linux
 
 ifeq ($(PLATFORM), gnu+linux)
-	DIR_INC = /usr/include
-	DIR_LIB = /usr/lib
-	DIR_BIN = /usr/bin
+	INC_DIR = /usr/include
+	LIB_DIR = /usr/lib
+	BIN_DIR = /usr/bin
 	CC := cc
 else
 ifeq ($(PLATFORM), mingw)
-	DIR_INC = /usr/x86_64-w64-mingw32/include
-	DIR_LIB = /usr/x86_64-w64-mingw32/lib
-	DIR_BIN = /usr/x86_64-w64-mingw32/bin
+	INC_DIR = /usr/x86_64-w64-mingw32/include
+	LIB_DIR = /usr/x86_64-w64-mingw32/lib
+	BIN_DIR = /usr/x86_64-w64-mingw32/bin
 	CC := x86_64-w64-mingw32-cc
 else
 all: $(error platform `$(PLATFORM)` not supported)
 endif
 endif
 
-DIR_INSTALL_INC = $(DIR_INSTALL)$(DIR_INC)
-DIR_INSTALL_LIB = $(DIR_INSTALL)$(DIR_LIB)
-DIR_INSTALL_BIN = $(DIR_INSTALL)$(DIR_BIN)
-DIR_OBJ = obj-$(PLATFORM)
+INSTALL_INC_DIR = $(INSTALL_DIR)$(INC_DIR)
+INSTALL_LIB_DIR = $(INSTALL_DIR)$(LIB_DIR)
+INSTALL_BIN_DIR = $(INSTALL_DIR)$(BIN_DIR)
+OBJ_DIR = obj-$(PLATFORM)
 
-DIRS = $(DIR_INSTALL_INC)/pge/ \
-       $(DIR_INSTALL_LIB)/pge/ \
-       $(DIR_INSTALL_BIN)/
+DIRS = $(INSTALL_INC_DIR)/pge/ \
+       $(INSTALL_LIB_DIR)/pge/ \
+       $(INSTALL_BIN_DIR)/
 
-DIRS_SRC = $(shell find src -type d)
-DIRS_OBJ = $(DIRS_SRC:src/%=$(DIR_OBJ)/%/)
+SRC_DIRS = $(shell find src -type d)
+OBJ_DIRS = $(SRC_DIRS:src/%=$(OBJ_DIR)/%/)
 SRC = $(shell find src -name '*.c')
-OBJ = $(SRC:src/%.c=$(DIR_OBJ)/%.o)
+OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 C_FLAGS = -O3 -Wall
 
-LIB = $(DIR_LIB)/pul/{str,put,vec}.o
+LIB = $(LIB_DIR)/pul/{str,put,vec}.o
 
 %/:
 	mkdir -p $@
 
-$(DIR_OBJ)/%.o: src/%.c
+$(OBJ_DIR)/%.o: src/%.c
 	$(CC) $< -o $@ -c $(C_FLAGS)
 
-all: $(DIRS_OBJ) $(OBJ)
+all: $(OBJ_DIRS) $(OBJ)
 
 install: all uninstall $(DIRS)
-	cp -ru inc/* $(DIR_INSTALL_INC)/pge
-	cp -ru $(DIR_OBJ)/* $(DIR_INSTALL_LIB)/pge
-	cp -u bin/pge $(DIR_INSTALL_BIN)/
+	cp -ru inc/* $(INSTALL_INC_DIR)/pge
+	cp -ru $(OBJ_DIR)/* $(INSTALL_LIB_DIR)/pge
+	cp -u bin/pge $(INSTALL_BIN_DIR)/
 
 uninstall:
-	rm -rf $(DIR_INSTALL_INC)/pge/
-	rm -rf $(DIR_INSTALL_LIB)/pge/
-	rm -f $(DIR_INSTALL_BIN)/pge
+	rm -rf $(INSTALL_INC_DIR)/pge/
+	rm -rf $(INSTALL_LIB_DIR)/pge/
+	rm -f $(INSTALL_BIN_DIR)/pge
 
 clean:
-	rm -rf $(DIR_OBJ)
+	rm -rf $(OBJ_DIR)
 
