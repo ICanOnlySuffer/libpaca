@@ -6,7 +6,7 @@
 # include <SDL2/SDL_image.h>
 # include "log.h"
 
-extern struct window {
+ext struct window {
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	SDL_Texture * texture;
@@ -14,12 +14,8 @@ extern struct window {
 	u16 h;
 } WINDOW;
 
-extern nil window_init (str name, u64 width, u64 height);
-extern nil window_quit ();
-
-inl SDL_Texture * texture_from_surface (SDL_Surface * surface) {
-	return SDL_CreateTextureFromSurface (WINDOW.renderer, surface);
-}
+ext nil window_init (str name, u64 width, u64 height);
+ext nil window_quit ();
 
 inl nil set_render_target (SDL_Texture * texture) {
 	SDL_SetRenderTarget (WINDOW.renderer, texture);
