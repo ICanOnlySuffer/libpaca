@@ -6,10 +6,10 @@ Compiles for GNU+Linux and Mingw (from withing GNU+Linux).
 
 ## Installation
 
-**requirements:**
+**dependencies:**
 
-- [SDL](https://libsdl.org/download-2.0.php)
-- [pul](https://gitlab.com/ICanOnlySuffer/pul)
+- [SDL](https://libsdl.org/download-2.0.php) (make)
+- [pul](https://gitlab.com/ICanOnlySuffer/pul) (make)
 
 **commands:**
 
@@ -17,7 +17,7 @@ Compiles for GNU+Linux and Mingw (from withing GNU+Linux).
 
 ## Examples
 
-soon...
+- [connect-4](https://gitlab.com/ICanOnlySuffer/connect-4)
 
 ## Contributing
 
