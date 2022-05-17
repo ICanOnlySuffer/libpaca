@@ -2,7 +2,7 @@
 # include "../../inc/drawable/text.h"
 
 nil button_draw (drawable_t * button) {
-	drawable_render (button, 0);
+	render_copy (button -> data [0], &button -> rect);
 }
 
 nil button_free (ptr * data) {
@@ -30,7 +30,7 @@ drawable_t * button_new_ (str string, button_new_params params) {
 
 static nil button_change_color (drawable_t * button, u08 index) {
 	if (button -> data [0]) {
-		SDL_DestroyTexture (button -> data [0]);
+		texture_free (button -> data [0]);
 	}
 	surface_extract (
 		text_render (
@@ -38,9 +38,9 @@ static nil button_change_color (drawable_t * button, u08 index) {
 			button -> data [2],
 			button -> data [index]
 		),
-		&button -> w,
-		&button -> h,
-		(texture_t **) &button -> data [0]
+		(texture_t **) &button -> data [0],
+		&button -> rect.w,
+		&button -> rect.h
 	);
 }
 

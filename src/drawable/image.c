@@ -3,26 +3,28 @@
 surface_t * image_load (str path) {
 	surface_t * surface = IMG_Load (path);
 	if (not surface) {
-		LOG_ERR ("IMG_Load: %s", (u64) SDL_GetError ());
-		run = false;
+		LOG_ERR ("image_load: %s", (u64) SDL_GetError ());
 	}
 	return surface;
 }
 
 texture_t * image_load_texture (str path) {
 	surface_t * surface = image_load (path);
+	if (not surface) {
+		LOG_ERR ("image_load_texture: surface == NIL", 0);
+		return NIL;
+	}
 	texture_t * texture = texture_from_surface (surface);
-	SDL_FreeSurface (surface);
+	surface_free (surface);
 	return texture;
 }
 
 nil image_draw (drawable_t * image) {
-	SDL_Rect rect = {image -> x, image -> y, image -> w, image -> h};
-	render_copy (image -> data [0], &rect);
+	render_copy (image -> data [0], &image -> rect);
 }
 
 nil image_free (ptr * data) {
-	SDL_DestroyTexture (data [0]);
+	texture_free (data [0]);
 }
 
 drawable_t * image_new_ (str path, image_new_params params) {
@@ -32,9 +34,9 @@ drawable_t * image_new_ (str path, image_new_params params) {
 	image -> free = image_free;
 	surface_extract (
 		image_load (path),
-		&image -> w,
-		&image -> h,
-		(texture_t **) &image -> data [0]
+		(texture_t **) &image -> data [0],
+		&image -> rect.w,
+		&image -> rect.h
 	);
 	drawable_set_position (image, params.x, params.y);
 	

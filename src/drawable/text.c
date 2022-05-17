@@ -1,24 +1,24 @@
 # include "../../inc/drawable/text.h"
 
 nil text_draw (drawable_t * text) {
-	drawable_render (text, 0);
+	render_copy (text -> data [0], &text -> rect);
 }
 
 nil text_free (ptr * data) {
-	SDL_DestroyTexture (data [0]);
+	texture_free (data [0]);
 }
 
 nil text_renew (
 	drawable_t * text,
 	str string,
 	font_t * font,
-	SDL_Color * color
+	color_t * color
 ) {
 	surface_extract (
 		text_render (string, font, color),
-		&text -> w,
-		&text -> h,
-		(texture_t **) &text -> data [0]
+		(texture_t **) &text -> data [0],
+		&text -> rect.w,
+		&text -> rect.h
 	);
 }
 
