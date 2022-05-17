@@ -1,6 +1,8 @@
 
-TITLE = "Pocha's Game Engine"
-VERSION = "v0.1.0"
+VERSION_MAYOR = 0
+VERSION_MINOR = 2
+VERSION_PATCH = 0
+VERSION = $(VERSION_MAYOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
 PLATFORM := gnu+linux
 
@@ -44,7 +46,11 @@ LIB = $(LIB_DIR)/pul/{str,put,vec}.o
 $(OBJ_DIR)/%.o: src/%.c
 	$(CC) $< -o $@ -c $(C_FLAGS)
 
-all: $(OBJ_DIRS) $(OBJ)
+bin/pge: src/pge.zsh bin/
+	printf "`cat $<`" $(VERSION) > $@
+	chmod +x $@
+
+all: bin/pge $(OBJ_DIRS) $(OBJ)
 
 install: all uninstall $(DIRS)
 	cp -ru inc/* $(INSTALL_INC_DIR)/pge
@@ -57,5 +63,5 @@ uninstall:
 	rm -f $(INSTALL_BIN_DIR)/pge
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(OBJ_DIR) bin/
 

@@ -1,8 +1,0 @@
-#!/bin/env sh
-
-echo "\
-,-, ,-, ,-, Pocha's Game Engine v0.1.0
-| | | _ | |
-|-´ | | |-´ Copyright (c) 2022 Piero Estéfano Rojas Effio
-'   \`-´ \`-´ GNU General Public License v3.0"
-
