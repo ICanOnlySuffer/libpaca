@@ -12,21 +12,31 @@ inl SDL_Surface * text_render (
 	return TTF_RenderText_Blended (font, string, *color);
 }
 
-extern nil text_draw (drawable_t * text);
-extern nil text_free (ptr * data);
-extern nil text_renew (
+ext nil text_draw (drawable_t * text);
+ext nil text_free (ptr * data);
+ext nil text_renew (
 	drawable_t * text,
 	str string,
 	TTF_Font * font,
 	SDL_Color * color
 );
-extern drawable_t * text_new (
-	str string,
-	TTF_Font * font,
-	SDL_Color * color,
-	s16 x,
-	s16 y
-);
+
+typedef struct {
+	font_t * font;
+	SDL_Color * color;
+	s16 x;
+	s16 y;
+} text_new_params;
+ext drawable_t * text_new_ (str string, text_new_params);
+# define text_new(string_, ...) \
+	text_new_ ( \
+		string_, \
+		(text_new_params) { \
+			.x = 0, \
+			.y = 0, \
+			__VA_ARGS__ \
+		} \
+	)
 
 # endif // PGE_DRAWABLE_TEXT_H
 

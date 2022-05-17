@@ -25,18 +25,19 @@ nil image_free (ptr * data) {
 	SDL_DestroyTexture (data [0]);
 }
 
-drawable_t * image_new (str path, s16 x, s16 y) {
+drawable_t * image_new_ (str path, image_new_params params) {
 	drawable_t * image = malloc (sizeof (drawable_t));
 	image -> data = malloc (sizeof (ptr));
+	image -> draw = image_draw;
+	image -> free = image_free;
 	surface_extract (
 		image_load (path),
 		&image -> w,
 		&image -> h,
 		(texture_t **) &image -> data [0]
 	);
-	drawable_set_position (image, x, y);
-	image -> draw = image_draw;
-	image -> free = image_free;
+	drawable_set_position (image, params.x, params.y);
+	
 	return image;
 }
 
