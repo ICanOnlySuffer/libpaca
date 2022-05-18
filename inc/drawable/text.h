@@ -4,10 +4,10 @@
 # include "../drawable.h"
 # include "../font.h"
 
-inl SDL_Surface * text_render (
+inl surface_t * text_render (
 	str string,
-	TTF_Font * font,
-	SDL_Color * color
+	font_t * font,
+	color_t * color
 ) {
 	return TTF_RenderText_Blended (font, string, *color);
 }
@@ -17,8 +17,8 @@ ext nil text_free (ptr * data);
 ext nil text_renew (
 	drawable_t * text,
 	str string,
-	TTF_Font * font,
-	SDL_Color * color
+	font_t * font,
+	color_t * color
 );
 
 typedef struct {
