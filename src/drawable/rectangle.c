@@ -10,13 +10,13 @@ nil rectangle_draw (drawable_t * rectangle) {
 		&current_color.a
 	);
 	
-	color_t color = *(color_t *) rectangle -> data [0];
+	color_t * color = (color_t *) rectangle -> data [0];
 	SDL_SetRenderDrawColor (
 		WINDOW.renderer,
-		color.r,
-		color.g,
-		color.b,
-		color.a
+		color -> r,
+		color -> g,
+		color -> b,
+		color -> a
 	);
 	SDL_RenderDrawRect (WINDOW.renderer, &rectangle -> rect);
 	SDL_SetRenderDrawColor (
