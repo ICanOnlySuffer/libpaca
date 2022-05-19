@@ -24,7 +24,7 @@ nil on_update_psh (str fun_name, nil (* fun) ()) {
 	vector_psh ("ON_UPDATE", &ON_UPDATE, fun_name, fun);
 }
 
-nil on_event_psh (str fun_name, nil (* fun) (SDL_Event * event)) {
+nil on_event_psh (str fun_name, nil (* fun) (event_t * event)) {
 	vector_psh ("ON_EVENT", &ON_EVENT, fun_name, fun);
 }
 
@@ -45,7 +45,7 @@ nil on_update_rmv (str fun_name, nil (* fun) ()) {
 	vector_rmv ("ON_UPDATE", &ON_UPDATE, fun_name, fun);
 }
 
-nil on_event_rmv (str fun_name, nil (* fun) (SDL_Event * event)) {
+nil on_event_rmv (str fun_name, nil (* fun) (event_t * event)) {
 	vector_rmv ("ON_EVENT", &ON_EVENT, fun_name, fun);
 }
 
@@ -59,9 +59,9 @@ nil vectors_on_update () {
 	}
 }
 
-nil vectors_on_event (SDL_Event * event) {
+nil vectors_on_event (event_t * event) {
 	for (u08 i = 0; i < ON_EVENT.size; i++) {
-		((nil (*) (SDL_Event *)) ON_EVENT.items [i]) (event);
+		((nil (*) (event_t *)) ON_EVENT.items [i]) (event);
 	}
 }
 
