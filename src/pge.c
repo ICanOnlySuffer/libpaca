@@ -9,6 +9,12 @@
 # include <pul/vec.h>
 # include <pul/put.h>
 
+nil arr_for_all (u08 length, ptr array [], nil (*function) (ptr)) {
+	for (u08 i = 0; i < length; i++) {
+		function (array [i]);
+	}
+}
+
 struct window window;
 
 static u08 DELAY;
