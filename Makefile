@@ -36,7 +36,7 @@ OBJ_DIRS = $(SRC_DIRS:src/%=$(OBJ_DIR)/%/)
 SRC = $(shell find src -name '*.c')
 OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
-C_FLAGS = -O3 -Wall
+C_FLAGS = -fms-extensions -O3 -Wall
 
 LIB = $(LIB_DIR)/pul/{str,put,vec}.o
 
