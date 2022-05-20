@@ -37,7 +37,7 @@ ext nil box_set_position_ (box_t * box, SDL_FRect r);
 # define box_set_position(box_, ...) \
 	box_set_position_ ( \
 		box_, \
-		(SDL_FRect) { \
+		(frect_t) { \
 			.x = box_ -> x, \
 			.y = box_ -> y, \
 			__VA_ARGS__ \

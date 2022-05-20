@@ -23,7 +23,7 @@ ext nil text_renew (
 
 typedef struct {
 	font_t * font;
-	SDL_Color * color;
+	color_t * color;
 	s16 x;
 	s16 y;
 } text_new_params;

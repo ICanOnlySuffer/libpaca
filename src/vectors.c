@@ -91,7 +91,7 @@ nil vectors_init () {
 	
 	ON_UPDATE = vector_new ("ON_UPDATE", 4);
 	ON_EVENT = vector_new ("ON_EVENT", 4);
-	AT_QUIT = vector_new ("AT_EXIT", 4);
+	AT_QUIT = vector_new ("AT_QUIT", 4);
 	
 	at_quit_psh ("Vectors.quit", vectors_quit);
 	

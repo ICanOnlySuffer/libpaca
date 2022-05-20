@@ -3,7 +3,7 @@
 # define PGE_DRAWABLE_H
 # include <SDL2/SDL_render.h>
 # include <pul/vec.h>
-# include "surface.h"
+# include "renderer.h"
 
 # define CENTER -32768
 
@@ -27,8 +27,8 @@ ext nil drawable_free (drawable_t * drawable);
 
 # define DRAWABLE_FREE(...) \
 	arr_for_all ( \
-		(ARR_LEN ((drawable_t * []) {__VA_ARGS__})), \
-		(drawable_t * []) {__VA_ARGS__}, \
+		(ARR_LEN (((drawable_t * []) {__VA_ARGS__}))), \
+		(ptr []) {__VA_ARGS__}, \
 		(nil (*) (ptr)) drawable_free \
 	)
 

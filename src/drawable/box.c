@@ -12,8 +12,8 @@ nil box_draw (drawable_t * drawable) {
 }
 
 nil box_set_position_ (box_t * box, SDL_FRect r) {
-	box -> x = r.x == CENTER ? (WINDOW.w - box -> rect.w) / 2 : r.x;
-	box -> y = r.y == CENTER ? (WINDOW.h - box -> rect.h) / 2 : r.y;
+	box -> x = r.x == CENTER ? (WINDOW_W - box -> rect.w) / 2 : r.x;
+	box -> y = r.y == CENTER ? (WINDOW_H - box -> rect.h) / 2 : r.y;
 }
 
 box_t * box_new_ (drawable_t * drawable, box_new_params params) {
