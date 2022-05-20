@@ -1,5 +1,5 @@
+# include "../inc/renderer.h"
 # include "../inc/vectors.h"
-# include "../inc/window.h"
 # include "../inc/font.h"
 # include "../inc/pge.h"
 
@@ -15,33 +15,36 @@ nil arr_for_all (u08 length, ptr array [], nil (*function) (ptr)) {
 	}
 }
 
-struct window window;
-
-static u08 DELAY;
 u08 run = true;
 
-nil init (str title, u16 width, u16 height, u64 delay) {
+u08 init (str title, u16 width, u16 height, u08 delay) {
 	str proc = "init";
 	proc_init (proc);
+	
 	LOG ("SDL.init", 0);
 	if (SDL_Init (SDL_INIT_VIDEO)) {
-		LOG_ERR ("SDL_Init: %s", (u64) SDL_GetError ());
+		LOG_ERR ("SDL.init: %s", (u64) SDL_GetError ());
 		proc_quit (proc);
-		exit (1);
+		return false;
 	}
+	
 	vectors_init ();
-	window_init (title, width, height);
 	font_init ();
-	LOG ("DELAY = %u", delay);
-	DELAY = delay;
+	if (not window_init (title, width, height, delay)) {
+		proc_quit (proc);
+		quit ();
+		return false;
+	}
+	
 	proc_quit (proc);
+	return true;
 }
 
 nil quit () {
 	str proc = "quit";
 	proc_init (proc);
 	vectors_at_quit ();
-	LOG ("quitting SDL...", 0);
+	LOG ("SDL.quit", 0);
 	SDL_Quit ();
 	proc_quit (proc);
 }
@@ -50,18 +53,24 @@ nil loop () {
 	str proc = "loop";
 	proc_init (proc);
 	SDL_Event event;
+	
 	do {
-		set_render_target (WINDOW.texture);
+		render_set_target (TEXTURE);
+		render_set_draw_color (WINDOW_COLOR);
 		render_clear ();
+		
 		while (SDL_PollEvent (&event)) {
 			vectors_on_event (&event);
 		}
 		vectors_on_update ();
-		set_render_target (NIL);
-		render_copy (WINDOW.texture, NIL);
-		render ();
-		SDL_Delay (DELAY);
+		
+		render_set_target (NIL);
+		render_copy (TEXTURE, NIL);
+		render_present ();
+		
+		SDL_Delay (WINDOW_DELAY);
 	} while (run);
+	
 	proc_quit (proc);
 	quit ();
 }
