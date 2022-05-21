@@ -1,8 +1,7 @@
 
-VERSION_MAYOR = 0
-VERSION_MINOR = 3
-VERSION_PATCH = 0
-VERSION = $(VERSION_MAYOR).$(VERSION_MINOR).$(VERSION_PATCH)
+MAYOR = 0
+MINOR = 3
+PATCH = 0
 
 PLATFORM := gnu+linux
 
@@ -33,7 +32,7 @@ DIRS = $(INSTALL_INC_DIR)/pge/ \
 
 SRC_DIRS = $(shell find src -type d)
 OBJ_DIRS = $(SRC_DIRS:src/%=$(OBJ_DIR)/%/)
-SRC = $(shell find src -name '*.c')
+SRC = $(shell find src -type f ! -name version.c)
 OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 
 C_FLAGS = -fms-extensions -O3 -Wall
@@ -46,22 +45,19 @@ LIB = $(LIB_DIR)/pul/{str,put,vec}.o
 $(OBJ_DIR)/%.o: src/%.c
 	$(CC) $< -o $@ -c $(C_FLAGS)
 
-bin/pge: src/pge.zsh bin/
-	printf "`cat $<`" $(VERSION) > $@
-	chmod +x $@
+inc/version.h: src/version.c
+	printf "`cat $<`" $(MAYOR) $(MINOR) $(PATCH) > $@
 
-all: bin/pge $(OBJ_DIRS) $(OBJ)
+all: inc/version.h $(OBJ_DIRS) $(OBJ)
 
 install: all uninstall $(DIRS)
 	cp -ru inc/* $(INSTALL_INC_DIR)/pge
 	cp -ru $(OBJ_DIR)/* $(INSTALL_LIB_DIR)/pge
-	cp -u bin/pge $(INSTALL_BIN_DIR)/
 
 uninstall:
 	rm -rf $(INSTALL_INC_DIR)/pge/
 	rm -rf $(INSTALL_LIB_DIR)/pge/
-	rm -f $(INSTALL_BIN_DIR)/pge
 
 clean:
-	rm -rf $(OBJ_DIR) bin/
+	rm -rf inc/version.h $(OBJ_DIR)
 
