@@ -8,17 +8,15 @@ ext texture_t * image_load_texture (str path);
 ext nil image_draw (drawable_t * image);
 ext nil image_free (ptr * data);
 
-typedef struct {
-	s16 x;
-	s16 y;
-} image_new_params;
-ext drawable_t * image_new_ (str path, image_new_params);
+ext drawable_t * image_new_ (str path, drawable_t params);
 # define image_new(path_, ...) \
 	image_new_ ( \
 		path_, \
-		(image_new_params) { \
+		(drawable_t) { \
 			.x = 0, \
 			.y = 0, \
+			.dx = 0, \
+			.dy = 0, \
 			__VA_ARGS__ \
 		} \
 	)

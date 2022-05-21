@@ -22,12 +22,11 @@ ext nil text_renew (
 );
 
 typedef struct {
+	struct drawable_t;
 	font_t * font;
 	color_t * color;
-	s16 x;
-	s16 y;
 } text_new_params;
-ext drawable_t * text_new_ (str string, text_new_params);
+ext drawable_t * text_new_ (str string, text_new_params params);
 # define text_new(string_, ...) \
 	text_new_ ( \
 		string_, \

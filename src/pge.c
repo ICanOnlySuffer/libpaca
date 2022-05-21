@@ -1,4 +1,5 @@
 # include "../inc/renderer.h"
+# include "../inc/drawable.h"
 # include "../inc/vectors.h"
 # include "../inc/font.h"
 # include "../inc/pge.h"
@@ -29,6 +30,7 @@ u08 init (str title, u16 width, u16 height, u08 delay) {
 	}
 	
 	vectors_init ();
+	drawable_init ();
 	font_init ();
 	if (not window_init (title, width, height, delay)) {
 		proc_quit (proc);

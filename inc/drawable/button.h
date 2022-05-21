@@ -11,20 +11,21 @@ ext nil button_select (drawable_t * button);
 ext nil button_unselect (drawable_t * button);
 
 typedef struct {
+	struct drawable_t;
 	font_t * font;
 	SDL_Color * color_inactive;
 	SDL_Color * color_active;
 	nil (* function) ();
-	s16 x;
-	s16 y;
 } button_new_params;
-ext drawable_t * button_new_ (str string, button_new_params);
+ext drawable_t * button_new_ (str string, button_new_params params);
 # define button_new(string_, ...) \
 	button_new_ ( \
 		string_, \
 		(button_new_params) { \
 			.x = 0, \
 			.y = 0, \
+			.dx = 0, \
+			.dy = 0, \
 			__VA_ARGS__ \
 		} \
 	)

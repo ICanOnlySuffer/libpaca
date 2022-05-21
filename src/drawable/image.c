@@ -20,25 +20,29 @@ texture_t * image_load_texture (str path) {
 }
 
 nil image_draw (drawable_t * image) {
-	render_copy (image -> data [0], &image -> rect);
+	render_copy_f (image -> data [0], frect_from_drawable (image));
 }
 
 nil image_free (ptr * data) {
 	texture_free (data [0]);
 }
 
-drawable_t * image_new_ (str path, image_new_params params) {
-	drawable_t * image = malloc (sizeof (drawable_t));
+drawable_t * image_new_ (str path, drawable_t params) {
+	drawable_t * image = drawable_new ();
 	image -> data = malloc (sizeof (ptr));
+	
 	image -> draw = image_draw;
 	image -> free = image_free;
+	image -> dx = params.dx;
+	image -> dy = params.dy;
+	
 	surface_extract (
 		image_load (path),
 		(texture_t **) &image -> data [0],
-		&image -> rect.w,
-		&image -> rect.h
+		&image -> w,
+		&image -> h
 	);
-	drawable_set_position (image, params.x, params.y);
+	drawable_set_position (image, .x = params.x, .y = params.y);
 	
 	return image;
 }

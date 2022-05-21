@@ -2,7 +2,7 @@
 # include "../../inc/drawable/text.h"
 
 nil button_draw (drawable_t * button) {
-	render_copy (button -> data [0], &button -> rect);
+	render_copy_f (button -> data [0], frect_from_drawable (button));
 }
 
 nil button_free (ptr * data) {
@@ -10,7 +10,7 @@ nil button_free (ptr * data) {
 }
 
 drawable_t * button_new_ (str string, button_new_params params) {
-	drawable_t * button = malloc (sizeof (drawable_t));
+	drawable_t * button = drawable_new ();
 	
 	button -> data = malloc (sizeof (ptr [6]));
 	button -> data [0] = NIL;
@@ -23,7 +23,7 @@ drawable_t * button_new_ (str string, button_new_params params) {
 	button -> free = button_free;
 	
 	button_unselect (button);
-	drawable_set_position (button, params.x, params.y);
+	drawable_set_position (button, .x = params.x, .y = params.y);
 	
 	return button;
 }
@@ -39,8 +39,8 @@ static nil button_change_color (drawable_t * button, u08 index) {
 			button -> data [index]
 		),
 		(texture_t **) &button -> data [0],
-		&button -> rect.w,
-		&button -> rect.h
+		&button -> w,
+		&button -> h
 	);
 }
 

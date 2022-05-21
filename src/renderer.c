@@ -3,9 +3,9 @@
 
 static color_t window_default_color = {0, 0, 0, 255};
 
-window_t * WINDOW = NIL;
-renderer_t * RENDERER = NIL;
-texture_t * TEXTURE = NIL;
+window_t * WINDOW;
+renderer_t * RENDERER;
+texture_t * TEXTURE;
 u16 WINDOW_W;
 u16 WINDOW_H;
 u08 WINDOW_DELAY;
@@ -62,7 +62,7 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 		proc_quit (proc);
 		return false;
 	}
-	at_quit_psh ("TEXTURE.destroy %s", texture_quit);
+	at_quit_psh ("TEXTURE.destroy", texture_quit);
 	
 	WINDOW_W = w;
 	WINDOW_H = h;
@@ -92,13 +92,13 @@ nil texture_free (texture_t * texture) {
 nil surface_extract (
 	surface_t * surface,
 	texture_t ** texture,
-	s32 * w,
-	s32 * h
+	f32 * w,
+	f32 * h
 ) {
 	if (surface) {
 		*texture = texture_from_surface (surface);
-		*w = surface -> w;
-		*h = surface -> h;
+		*w = (f32) surface -> w;
+		*h = (f32) surface -> h;
 		surface_free (surface);
 	} else {
 		LOG_ERR ("surface_extract: surface == NIL", 0);

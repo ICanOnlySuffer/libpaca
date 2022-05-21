@@ -47,16 +47,28 @@ inl nil render_set_target (texture_t * texture) {
 	SDL_SetRenderTarget (RENDERER, texture);
 }
 
-inl nil render_draw_rect_lines (rect_t * rect) {
-	SDL_RenderDrawRect (RENDERER, rect);
+inl nil render_draw_frect_lines (frect_t frect) {
+	SDL_RenderDrawRectF (RENDERER, &frect);
 }
 
-inl nil render_draw_rect_full (rect_t * rect) {
-	SDL_RenderFillRect (RENDERER, rect);
+inl nil render_draw_frect_full (frect_t frect) {
+	SDL_RenderFillRectF (RENDERER, &frect);
+}
+
+inl nil render_draw_rect_lines (rect_t rect) {
+	SDL_RenderDrawRect (RENDERER, &rect);
+}
+
+inl nil render_draw_rect_full (rect_t rect) {
+	SDL_RenderFillRect (RENDERER, &rect);
 }
 
 inl nil render_clear () {
 	SDL_RenderClear (RENDERER);
+}
+
+inl nil render_copy_f (texture_t * texture, frect_t frect) {
+	SDL_RenderCopyF (RENDERER, texture, NIL, &frect);
 }
 
 inl nil render_copy (texture_t * texture, rect_t * rect) {
@@ -91,8 +103,8 @@ inl nil surface_free (surface_t * surface) {
 ext nil surface_extract (
 	surface_t * surface,
 	texture_t ** texture,
-	s32 * width,
-	s32 * height
+	f32 * width,
+	f32 * height
 );
 
 ext nil surface_replace (
