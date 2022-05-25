@@ -8,13 +8,11 @@ PLATFORM := gnu+linux
 ifeq ($(PLATFORM), gnu+linux)
 	INC_DIR = /usr/include
 	LIB_DIR = /usr/lib
-	BIN_DIR = /usr/bin
 	CC := cc
 else
 ifeq ($(PLATFORM), mingw)
 	INC_DIR = /usr/x86_64-w64-mingw32/include
 	LIB_DIR = /usr/x86_64-w64-mingw32/lib
-	BIN_DIR = /usr/x86_64-w64-mingw32/bin
 	CC := x86_64-w64-mingw32-cc
 else
 all: $(error platform `$(PLATFORM)` not supported)
@@ -23,7 +21,6 @@ endif
 
 INSTALL_INC_DIR = $(INSTALL_DIR)$(INC_DIR)
 INSTALL_LIB_DIR = $(INSTALL_DIR)$(LIB_DIR)
-INSTALL_BIN_DIR = $(INSTALL_DIR)$(BIN_DIR)
 OBJ_DIR = obj-$(PLATFORM)
 
 DIRS = $(INSTALL_INC_DIR)/pge/ \
