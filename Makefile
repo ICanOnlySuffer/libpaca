@@ -8,13 +8,13 @@ PLATFORM := gnu+linux
 ifeq ($(PLATFORM), gnu+linux)
 	INC_DIR = /usr/include
 	LIB_DIR = /usr/lib
-	LIB     = pge.so
+	LIB     = libpge.so
 	CC     := cc
 else
 ifeq ($(PLATFORM), mingw)
 	INC_DIR = /usr/x86_64-w64-mingw32/include
 	LIB_DIR = /usr/x86_64-w64-mingw32/lib
-	LIB     = pge.dll
+	LIB     = libpge.dll
 	CC     := x86_64-w64-mingw32-cc
 else
 all: $(error platform `$(PLATFORM)` not supported)
@@ -29,7 +29,7 @@ DIRS = $(INSTALL_INC_DIR)/pge/ \
 
 SRC = $(shell find src -type f ! -name version.c)
 
-C_FLAGS = -fms-extensions -O3 -Wall # -pedantic
+C_FLAGS = -fms-extensions -O3 -Wall
 
 %/:
 	mkdir -p $@
@@ -44,7 +44,7 @@ all: inc/version.h lib/$(LIB)
 
 install: all uninstall $(INSTALL_INC_DIR)/pge/ $(INSTALL_LIB_DIR)/
 	cp -ru inc/* $(INSTALL_INC_DIR)/pge
-	cp -ru lib/pge.so $(INSTALL_LIB_DIR)/$(LIB)
+	cp -ru lib/$(LIB) $(INSTALL_LIB_DIR)/$(LIB)
 
 uninstall:
 	rm -rf $(INSTALL_INC_DIR)/pge/
