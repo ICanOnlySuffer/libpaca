@@ -17,10 +17,10 @@ static nil dec_spaces () {
 }
 
 # ifdef __linux__
-# define ERR_STR "\e[31m"
-# define LOG_STR "\e[1;36m"
-# define PRC_STR "\e[36m"
-# define END_STR "\e[0m"
+# define ERR_STR "\033[31m"
+# define LOG_STR "\033[1;36m"
+# define PRC_STR "\033[36m"
+# define END_STR "\033[0m"
 # else
 # define ERR_STR "err: "
 # define LOG_STR "log: "
