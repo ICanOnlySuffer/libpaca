@@ -7,23 +7,24 @@
 
 typedef SDL_Event event_t;
 
-ext vec ON_UPDATE;
-ext vec ON_EVENT;
-ext vec AT_QUIT;
+typedef struct {
+	vec;
+	str name;
+} vector_t;
 
-ext vec vector_new (str name, u64 size);
-ext nil vector_free (str name, vec * vector);
+ext vector_t vector_new (str name, u16 size);
+ext nil vector_free (vector_t * vector);
 
-ext nil vector_psh (str vec_, vec * vector, str fun_, ptr fun);
-ext nil vector_rmv (str vec_, vec * vector, str fun_, ptr fun);
+ext u08 vector_psh (vector_t * vector, ptr item);
+ext u08 vector_rmv (vector_t * vector, ptr item);
 
-ext nil on_update_psh (str fun_name, nil (* fun) ());
-ext nil on_event_psh (str fun_name, nil (* fun) (event_t *));
-ext nil at_quit_psh (str fun_name, nil (* fun) ());
+ext u08 on_update_psh (nil (* proc) ());
+ext u08 on_event_psh (nil (* proc) (event_t *));
+ext u08 at_quit_psh (nil (* proc) ());
 
-ext nil on_update_rmv (str fun_name, nil (* fun) ());
-ext nil on_event_rmv (str fun_name, nil (* fun) (event_t *));
-ext nil at_quit_rmv (str fun_name, nil (* fun) ());
+ext u08 on_update_rmv (nil (* proc) ());
+ext u08 on_event_rmv (nil (* proc) (event_t *));
+ext u08 at_quit_rmv (nil (* proc) ());
 
 ext nil vectors_on_update ();
 ext nil vectors_on_event (event_t * event);

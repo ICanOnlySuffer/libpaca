@@ -1,56 +1,66 @@
 # include "../inc/vectors.h"
 # include "../inc/log.h"
 
-vec ON_UPDATE;
-vec ON_EVENT;
-vec AT_QUIT;
+static vector_t ON_UPDATE;
+static vector_t ON_EVENT;
+static vector_t AT_QUIT;
 
-vec vector_new (str name, u64 size) {
-	LOG ("%s = Vector.new %u", (u64) name, size);
-	return VEC ((u16) size);
+vector_t vector_new (str name, u16 capacity) {
+	LOG ("%s = Vector.new %u", (u64) name, (u64) capacity);
+	ret (vector_t) {
+		.items = malloc (sizeof (ptr) * capacity),
+		.capacity = capacity,
+		.size = 0,
+		.name = name
+	};
 }
 
-nil vector_free (str name, vec * vector) {
-	LOG ("%s.items.free", (u64) name);
+nil vector_free (vector_t * vector) {
+	LOG ("%s.items.free", (u64) vector -> name);
 	free (vector -> items);
 }
 
-nil vector_psh (str vec_name, vec * vector, str fun_name, ptr fun) {
-	LOG ("%s.psh %s", (u64) vec_name, (u64) fun_name);
-	vec_psh (vector, fun);
-}
-
-nil on_update_psh (str fun_name, nil (* fun) ()) {
-	vector_psh ("ON_UPDATE", &ON_UPDATE, fun_name, fun);
-}
-
-nil on_event_psh (str fun_name, nil (* fun) (event_t * event)) {
-	vector_psh ("ON_EVENT", &ON_EVENT, fun_name, fun);
-}
-
-nil at_quit_psh (str fun_name, nil (* fun) ()) {
-	vector_psh ("AT_QUIT", &AT_QUIT, fun_name, fun);
-}
-
-nil vector_rmv (str vec_name, vec * vector, str fun_name, ptr fun) {
-	LOG ("%s.rmv %s", (u64) vec_name, (u64) fun_name);
-	if (vec_inc (vector, fun)) {
-		vec_rmv (vector, fun);
-	} else {
-		LOG_ERR ("not %s.inc %s", (u64) vec_name, (u64) fun_name);
+u08 vector_psh (vector_t * vector, ptr item) {
+	LOG ("%s.psh %x", (u64) vector -> name, (u64) item);
+	if (vec_psh ((vec *) vector, item)) {
+		ret true;
 	}
+	LOG_ERR ("not %s.psh %x", (u64) vector -> name, (u64) item);
+	ret false;
 }
 
-nil on_update_rmv (str fun_name, nil (* fun) ()) {
-	vector_rmv ("ON_UPDATE", &ON_UPDATE, fun_name, fun);
+u08 vector_rmv (vector_t * vector, ptr item) {
+	LOG ("%s.rmv %x", (u64) vector -> name, (u64) item);
+	if (vec_inc ((vec *) vector, item)) {
+		vec_rmv ((vec *) vector, item);
+		ret true;
+	}
+	LOG_ERR ("not %s.inc %x", (u64) vector -> name, (u64) item);
+	ret false;
 }
 
-nil on_event_rmv (str fun_name, nil (* fun) (event_t * event)) {
-	vector_rmv ("ON_EVENT", &ON_EVENT, fun_name, fun);
+u08 on_update_psh (nil (* proc) ()) {
+	ret vector_psh (&ON_UPDATE, proc);
 }
 
-nil at_quit_rmv (str fun_name, nil (* fun) ()) {
-	vector_rmv ("AT_QUIT", &AT_QUIT, fun_name, fun);
+u08 on_event_psh (nil (* proc) (event_t * event)) {
+	ret vector_psh (&ON_EVENT, proc);
+}
+
+u08 at_quit_psh (nil (* proc) ()) {
+	ret vector_psh (&AT_QUIT, proc);
+}
+
+u08 on_update_rmv (nil (* proc) ()) {
+	ret vector_rmv (&ON_UPDATE, proc);
+}
+
+u08 on_event_rmv (nil (* proc) (event_t * event)) {
+	ret vector_rmv (&ON_EVENT, proc);
+}
+
+u08 at_quit_rmv (nil (* proc) ()) {
+	ret vector_rmv (&AT_QUIT, proc);
 }
 
 nil vectors_on_update () {
@@ -78,9 +88,9 @@ nil vectors_quit () {
 	str proc = "Vectors.quit";
 	proc_init (proc);
 	
-	vector_free ("ON_UPDATE", &ON_UPDATE);
-	vector_free ("ON_EVENT", &ON_EVENT);
-	vector_free ("AT_QUIT", &AT_QUIT);
+	vector_free (&ON_UPDATE);
+	vector_free (&ON_EVENT);
+	vector_free (&AT_QUIT);
 	
 	proc_quit (proc);
 }
@@ -93,7 +103,7 @@ nil vectors_init () {
 	ON_EVENT = vector_new ("ON_EVENT", 4);
 	AT_QUIT = vector_new ("AT_QUIT", 4);
 	
-	at_quit_psh ("Vectors.quit", vectors_quit);
+	at_quit_psh (vectors_quit);
 	
 	proc_quit (proc);
 }
