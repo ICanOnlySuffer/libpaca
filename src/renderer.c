@@ -34,7 +34,7 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 		proc_quit (proc);
 		return false;
 	}
-	at_quit_psh ("WINDOW.destroy", window_quit);
+	at_quit_psh (window_quit);
 	
 	LOG ("RENDERER = Renderer.new WINDOW", 0);
 	RENDERER = SDL_CreateRenderer (
@@ -47,7 +47,7 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 		proc_quit (proc);
 		return false;
 	}
-	at_quit_psh ("RENDERER.destroy", renderer_quit);
+	at_quit_psh (renderer_quit);
 	
 	LOG ("TEXTURE = Texture.new RENDERER, %u, %u", w, h);
 	TEXTURE = SDL_CreateTexture (
@@ -62,7 +62,7 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 		proc_quit (proc);
 		return false;
 	}
-	at_quit_psh ("TEXTURE.destroy", texture_quit);
+	at_quit_psh (texture_quit);
 	
 	WINDOW_W = w;
 	WINDOW_H = h;
@@ -89,7 +89,7 @@ nil texture_free (texture_t * texture) {
 }
 
 /* surface */
-nil surface_extract (
+u08 surface_extract (
 	surface_t * surface,
 	texture_t ** texture,
 	f32 * w,
@@ -100,9 +100,10 @@ nil surface_extract (
 		*w = (f32) surface -> w;
 		*h = (f32) surface -> h;
 		surface_free (surface);
+		ret true;
 	} else {
 		LOG_ERR ("surface_extract: surface == NIL", 0);
-		*texture = NIL;
+		ret false;
 	}
 }
 
@@ -113,7 +114,7 @@ nil surface_replace (
 ) {
 	if (not surface) {
 		LOG_ERR ("surface_replace: surface == NIL", 0);
-		return;
+		ret;
 	}
 	u08 * pixels = surface -> pixels;
 	

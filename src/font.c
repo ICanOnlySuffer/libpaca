@@ -2,39 +2,49 @@
 # include "../inc/font.h"
 # include "../inc/log.h"
 
-static vec FONTS;
+static vector_t FONTS;
 
 nil font_close (TTF_Font * font) {
-	LOG ("Font.close font", 0);
+	LOG ("Font.close %x", (u64) font);
 	TTF_CloseFont (font);
 }
 
 nil font_quit () {
 	str proc = "Font.quit";
 	proc_init (proc);
-	vec_for_all (&FONTS, (nil (*) (ptr)) font_close);
-	LOG ("FONTS.items.free", 0);
+	
+	vec_for_all ((vec *) &FONTS, (prc) font_close);
+	LOG ("FONTS.free", 0);
 	free (FONTS.items);
+	TTF_Quit ();
+	
 	proc_quit (proc);
 }
 
-nil font_init () {
+u08 font_init () {
 	str proc = "Font.init";
 	proc_init (proc);
-	TTF_Init ();
+	
+	if (TTF_Init ()) { // 0 == success for some reason
+		LOG ("font_init: %s", (u64) SDL_GetError ());
+		proc_quit (proc);
+		ret false;
+	}
 	FONTS = vector_new ("FONTS", 4);
-	at_quit_psh ("Font.quit", font_quit);
+	at_quit_psh (font_quit);
+	
 	proc_quit (proc);
+	ret true;
 }
 
-TTF_Font * font_open (str path, u64 size) {
-	LOG ("font = Font.open \"%s\", %u", (u64) path, size);
+font_t * font_open (str path, u64 size) {
 	font_t * font = TTF_OpenFont (path, size);
+	LOG ("%x = Font.open \"%s\", %u", (u64) font, (u64) path, size);
 	if (font) {
-		vector_psh ("FONTS", &FONTS, "font", font);
+		vector_psh (&FONTS, font);
 	} else {
-		LOG_ERR ("SDL: %s", (u64) SDL_GetError ());
+		LOG_ERR ("font_open: %s", (u64) SDL_GetError ());
 	}
-	return font;
+	ret font;
 }
 

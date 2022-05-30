@@ -100,7 +100,7 @@ inl nil surface_free (surface_t * surface) {
 	SDL_FreeSurface (surface);
 }
 
-ext nil surface_extract (
+ext u08 surface_extract (
 	surface_t * surface,
 	texture_t ** texture,
 	f32 * width,

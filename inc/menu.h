@@ -13,7 +13,7 @@ typedef struct {
 ext nil menu_activate (menu_t * menu);
 ext nil menu_deactivate (menu_t * menu);
 inl nil menu_log (menu_t * menu, str string) {
-	LOG ("\e[35m<%s> %s", (u64) menu -> name, (u64) string);
+	LOG ("\033[35m<%s> %s", (u64) menu -> name, (u64) string);
 }
 
 # endif // PGE_MENU_H
