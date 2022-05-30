@@ -2,57 +2,48 @@
 # include "../../inc/drawable/text.h"
 
 nil button_draw (drawable_t * button) {
-	render_copy_f (button -> data [0], frect_from_drawable (button));
+	render_copy_f (
+		((struct button *) button) -> texture,
+		frect_from_drawable (button)
+	);
 }
 
-nil button_free (ptr * data) {
-	SDL_DestroyTexture (data [0]);
+nil button_free (drawable_t * button) {
+	texture_free (((struct button *) button) -> texture);
 }
 
-drawable_t * button_new_ (str string, button_new_params params) {
-	drawable_t * button = drawable_new ();
-	
-	button -> data = malloc (sizeof (ptr [6]));
-	button -> data [0] = NIL;
-	button -> data [1] = string;
-	button -> data [2] = params.font;
-	button -> data [3] = params.color_inactive;
-	button -> data [4] = params.color_active;
-	button -> data [5] = params.function;
-	button -> draw = button_draw;
-	button -> free = button_free;
-	
-	button_unselect (button);
-	drawable_set_position (button, .x = params.x, .y = params.y);
-	
-	return button;
+drawable_t * button_new (struct button button) {
+	button.texture = NIL;
+	button_unselect (&button);
+	button.draw = button_draw;
+	button.free = button_free;
+	ret DRAWABLE_NEW (button);
 }
 
-static nil button_change_color (drawable_t * button, u08 index) {
-	if (button -> data [0]) {
-		texture_free (button -> data [0]);
+static nil button_set_color (
+	struct button * button,
+	color_t * color
+) {
+	if (button -> texture) {
+		texture_free (button -> texture);
 	}
 	surface_extract (
-		text_render (
-			button -> data [1],
-			button -> data [2],
-			button -> data [index]
-		),
-		(texture_t **) &button -> data [0],
+		text_render (button -> string, button -> font, color),
+		&button -> texture,
 		&button -> w,
 		&button -> h
 	);
 }
 
-nil button_select (drawable_t * button) {
-	button_change_color (button, 4);
+nil button_select (struct button * button) {
+	button_set_color (button, button -> color_active);
 }
 
-nil button_unselect (drawable_t * button) {
-	button_change_color (button, 3);
+nil button_unselect (struct button * button) {
+	button_set_color (button, button -> color_inactive);
 }
 
-nil button_press (drawable_t * button) {
-	((nil (*) ()) button -> data [5]) ();
+nil button_press (struct button * button) {
+	button -> function ();
 }
 

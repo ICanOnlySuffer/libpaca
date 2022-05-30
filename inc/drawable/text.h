@@ -4,6 +4,14 @@
 # include "../drawable.h"
 # include "../font.h"
 
+struct text {
+	struct drawable_t;
+	texture_t * texture;
+	str string;
+	color_t * color;
+	font_t * font;
+};
+
 inl surface_t * text_render (
 	str string,
 	font_t * font,
@@ -13,26 +21,20 @@ inl surface_t * text_render (
 }
 
 ext nil text_draw (drawable_t * text);
-ext nil text_free (ptr * data);
+ext nil text_free (drawable_t * text);
 ext nil text_renew (
-	drawable_t * text,
+	struct text * text,
 	str string,
-	font_t * font,
-	color_t * color
+	color_t * color,
+	font_t * font
 );
 
-typedef struct {
-	struct drawable_t;
-	font_t * font;
-	color_t * color;
-} text_new_params;
-ext drawable_t * text_new_ (str string, text_new_params params);
-# define text_new(string_, ...) \
-	text_new_ ( \
+ext drawable_t * text_new (str string, struct text text);
+# define TEXT_NEW(string_, ...) \
+	text_new ( \
 		string_, \
-		(text_new_params) { \
-			.x = 0, \
-			.y = 0, \
+		(struct text) { \
+			DRAWABLE_DEFAULT, \
 			__VA_ARGS__ \
 		} \
 	)

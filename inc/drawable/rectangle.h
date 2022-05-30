@@ -5,19 +5,19 @@
 
 ext nil rectangle_draw_lines (drawable_t * rectangle);
 ext nil rectangle_draw_full (drawable_t * rectangle);
-ext nil rectangle_free (ptr * data);
+ext nil rectangle_free (drawable_t * rectangle);
 
-ext drawable_t * rectangle_new_ (color_t * color, drawable_t params);
-# define rectangle_new(color_, ...) \
-	rectangle_new_ ( \
-		color_, \
-		(drawable_t) { \
-			.x = 0, \
-			.y = 0, \
-			.w = 1, \
-			.h = 1, \
-			.dy = 0, \
-			.dx = 0, \
+struct rectangle {
+	struct drawable_t;
+	color_t * color;
+};
+
+ext drawable_t * rectangle_new (struct rectangle rectangle);
+
+# define RECTANGLE_NEW(...) \
+	rectangle_new ( \
+		(struct rectangle) { \
+			DRAWABLE_DEFAULT, \
 			.draw = rectangle_draw_full, \
 			__VA_ARGS__ \
 		} \

@@ -1,35 +1,37 @@
 # include "../../inc/drawable/text.h"
 
 nil text_draw (drawable_t * text) {
-	render_copy_f (text -> data [0], frect_from_drawable (text));
+	render_copy_f (
+		((struct text *) text) -> texture,
+		frect_from_drawable (text)
+	);
 }
 
-nil text_free (ptr * data) {
-	texture_free (data [0]);
+nil text_free (drawable_t * text) {
+	texture_free (((struct text *) text) -> texture);
 }
 
 nil text_renew (
-	drawable_t * text,
+	struct text * text,
 	str string,
-	font_t * font,
-	color_t * color
+	color_t * color,
+	font_t * font
 ) {
+	text -> color = color;
+	text -> font = font;
+	
 	surface_extract (
 		text_render (string, font, color),
-		(texture_t **) &text -> data [0],
+		&text -> texture,
 		&text -> w,
 		&text -> h
 	);
 }
 
-drawable_t * text_new_ (str string, text_new_params params) {
-	drawable_t * text = drawable_new ();
-	text -> data = malloc (sizeof (ptr));
-	text -> draw = text_draw;
-	text -> free = text_free;
-	text_renew (text, string, params.font, params.color);
-	drawable_set_position (text, .x = params.x, .y = params.y);
-	
-	return text;
+drawable_t * text_new (str string, struct text text) {
+	text_renew (&text, string, text.color, text.font);
+	text.free = text_free;
+	text.draw = text_draw;
+	ret DRAWABLE_NEW (text);
 }
 

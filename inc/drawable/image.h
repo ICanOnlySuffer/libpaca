@@ -6,17 +6,18 @@
 ext surface_t * image_load (str path);
 ext texture_t * image_load_texture (str path);
 ext nil image_draw (drawable_t * image);
-ext nil image_free (ptr * data);
+ext nil image_free (drawable_t * image);
 
-ext drawable_t * image_new_ (str path, drawable_t params);
-# define image_new(path_, ...) \
-	image_new_ ( \
+struct image {
+	struct drawable_t;
+	texture_t * texture;
+};
+ext drawable_t * image_new (str path, struct image image);
+# define IMAGE_NEW(path_, ...) \
+	image_new ( \
 		path_, \
-		(drawable_t) { \
-			.x = 0, \
-			.y = 0, \
-			.dx = 0, \
-			.dy = 0, \
+		(struct image) { \
+			DRAWABLE_DEFAULT, \
 			__VA_ARGS__ \
 		} \
 	)

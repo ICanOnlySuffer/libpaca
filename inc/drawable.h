@@ -8,7 +8,6 @@
 typedef SDL_FPoint point_t;
 
 typedef struct drawable_t {
-	ptr * data;
 	f32 x;
 	f32 y;
 	f32 w;
@@ -16,45 +15,49 @@ typedef struct drawable_t {
 	f32 dx;
 	f32 dy;
 	nil (* draw) (struct drawable_t * drawable);
-	nil (* free) (ptr * data);
+	nil (* free) (struct drawable_t * drawable);
 } drawable_t;
 
 inl f32 drawable_v (drawable_t * drawable) {
-	return drawable -> y + drawable -> h / 2;
+	ret drawable -> y + drawable -> h / 2;
 }
 inl f32 drawable_h (drawable_t * drawable) {
-	return drawable -> x + drawable -> w / 2;
+	ret drawable -> x + drawable -> w / 2;
 }
 inl f32 drawable_s (drawable_t * drawable) {
-	return drawable -> y + drawable -> h;
+	ret drawable -> y + drawable -> h;
 }
 inl f32 drawable_e (drawable_t * drawable) {
-	return drawable -> x + drawable -> w;
+	ret drawable -> x + drawable -> w;
 }
 inl f32 drawable_n (drawable_t * drawable) {
-	return drawable -> y;
+	ret drawable -> y;
 }
 inl f32 drawable_w (drawable_t * drawable) {
-	return drawable -> x;
+	ret drawable -> x;
 }
 
-ext frect_t frect_from_drawable (drawable_t * drawable);
+inl frect_t frect_from_drawable (drawable_t * drawable) {
+	ret (frect_t) {
+		drawable -> x,
+		drawable -> y,
+		drawable -> w,
+		drawable -> h
+	};
+}
+
+inl nil drawable_center_x (drawable_t * drawable) {
+	drawable -> x = (WINDOW_W - drawable -> w) / 2;
+}
+
+inl nil drawable_center_y (drawable_t * drawable) {
+	drawable -> y = (WINDOW_H - drawable -> h) / 2;
+}
 
 inl nil drawable_update (drawable_t * drawable) {
 	drawable -> x += drawable -> dx;
 	drawable -> y += drawable -> dy;
 }
-
-ext nil drawable_set_position_ (drawable_t * drawable, point_t point);
-# define drawable_set_position(drawable_, ...) \
-	drawable_set_position_ ( \
-		drawable_, \
-		(point_t) { \
-			.x = drawable_ -> x, \
-			.y = drawable_ -> y, \
-			__VA_ARGS__ \
-		} \
-	)
 
 ext nil drawable_draw (drawable_t * drawable);
 # define DRAWABLE_DRAW(...) \
@@ -75,7 +78,16 @@ ext nil drawable_free (drawable_t * drawable);
 ext nil drawable_quit ();
 ext nil drawable_init ();
 
-ext drawable_t * drawable_new ();
+ext drawable_t * drawable_new (u16 size, drawable_t * params);
+
+# define DRAWABLE_NEW(params_) \
+	drawable_new (sizeof (params_), (drawable_t *) &params_)
+
+# define DRAWABLE_DEFAULT \
+	.x = 0, \
+	.y = 0, \
+	.dy = 0, \
+	.dx = 0
 
 # endif // PGE_DRAWABLE_H
 

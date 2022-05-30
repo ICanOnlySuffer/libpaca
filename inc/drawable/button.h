@@ -4,28 +4,27 @@
 # include "../drawable.h"
 # include "../font.h"
 
-ext nil button_draw (drawable_t * button);
-ext nil button_free (ptr * data);
-ext nil button_press (drawable_t * button);
-ext nil button_select (drawable_t * button);
-ext nil button_unselect (drawable_t * button);
-
-typedef struct {
+struct button {
 	struct drawable_t;
+	texture_t * texture;
+	str string;
+	color_t * color_active;
+	color_t * color_inactive;
 	font_t * font;
-	SDL_Color * color_inactive;
-	SDL_Color * color_active;
 	nil (* function) ();
-} button_new_params;
-ext drawable_t * button_new_ (str string, button_new_params params);
-# define button_new(string_, ...) \
-	button_new_ ( \
-		string_, \
-		(button_new_params) { \
-			.x = 0, \
-			.y = 0, \
-			.dx = 0, \
-			.dy = 0, \
+};
+
+ext nil button_draw (drawable_t * button);
+ext nil button_free (drawable_t * button);
+ext nil button_press (struct button * button);
+ext nil button_select (struct button * button);
+ext nil button_unselect (struct button * button);
+
+ext drawable_t * button_new (struct button button);
+# define BUTTON_NEW(string_, ...) \
+	button_new ( \
+		(struct button) { \
+			DRAWABLE_DEFAULT, \
 			__VA_ARGS__ \
 		} \
 	)
