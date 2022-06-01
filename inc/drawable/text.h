@@ -8,8 +8,8 @@ struct text {
 	struct drawable_t;
 	texture_t * texture;
 	str string;
-	color_t * color;
 	font_t * font;
+	color_t * color;
 };
 
 inl surface_t * text_render (
@@ -17,24 +17,20 @@ inl surface_t * text_render (
 	font_t * font,
 	color_t * color
 ) {
-	return TTF_RenderText_Blended (font, string, *color);
+	ret TTF_RenderText_Blended (font, string, *color);
 }
 
 ext nil text_draw (drawable_t * text);
 ext nil text_free (drawable_t * text);
-ext nil text_renew (
-	struct text * text,
-	str string,
-	color_t * color,
-	font_t * font
-);
+ext nil text_renew (struct text * text);
 
-ext drawable_t * text_new (str string, struct text text);
+ext struct text * text_new (struct text text);
 # define TEXT_NEW(string_, ...) \
 	text_new ( \
-		string_, \
 		(struct text) { \
 			DRAWABLE_DEFAULT, \
+			.font = FONT_DEFAULT, \
+			.string = string_, \
 			__VA_ARGS__ \
 		} \
 	)

@@ -15,8 +15,8 @@ nil rectangle_free (drawable_t * rectangle) {
 	// nothing to free
 }
 
-drawable_t * rectangle_new (struct rectangle rectangle) {
+struct rectangle * rectangle_new (struct rectangle rectangle) {
 	rectangle.free = rectangle_free;
-	ret DRAWABLE_NEW (rectangle);
+	ret (struct rectangle *) DRAWABLE_NEW (rectangle);
 }
 

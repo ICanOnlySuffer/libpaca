@@ -10,9 +10,11 @@ nil drawable_draw (drawable_t * drawable) {
 
 nil drawable_free (drawable_t * drawable) {
 	LOG ("DRAWABLES.free %x", (u64) drawable);
-	
 	if (vec_inc ((vec *) &DRAWABLES, drawable)) {
 		drawable -> free (drawable);
+		if (run) {
+			vector_rmv (&DRAWABLES, drawable);
+		}
 		free (drawable);
 	} else {
 		LOG_ERR ("not DRAWABLES.inc %x", (u64) drawable);

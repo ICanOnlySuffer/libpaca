@@ -30,13 +30,13 @@ nil image_free (drawable_t * image) {
 	texture_free (((struct image *) image) -> texture);
 }
 
-drawable_t * image_new (str path, struct image image) {
+struct image * image_new (str path, struct image image) {
 	surface_extract (
 		image_load (path),
 		&image.texture,
 		&image.w,
 		&image.h
 	);
-	ret DRAWABLE_NEW (image);
+	ret (struct image *) DRAWABLE_NEW (image);
 }
 

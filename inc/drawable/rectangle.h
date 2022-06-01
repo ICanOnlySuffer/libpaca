@@ -12,7 +12,7 @@ struct rectangle {
 	color_t * color;
 };
 
-ext drawable_t * rectangle_new (struct rectangle rectangle);
+ext struct rectangle * rectangle_new (struct rectangle rectangle);
 
 # define RECTANGLE_NEW(...) \
 	rectangle_new ( \

@@ -12,7 +12,7 @@ struct image {
 	struct drawable_t;
 	texture_t * texture;
 };
-ext drawable_t * image_new (str path, struct image image);
+ext struct image * image_new (str path, struct image image);
 # define IMAGE_NEW(path_, ...) \
 	image_new ( \
 		path_, \

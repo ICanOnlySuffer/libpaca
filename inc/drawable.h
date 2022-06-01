@@ -62,7 +62,7 @@ inl nil drawable_update (drawable_t * drawable) {
 ext nil drawable_draw (drawable_t * drawable);
 # define DRAWABLE_DRAW(...) \
 	arr_for_all ( \
-		(ARR_LEN (((drawable_t * []) {__VA_ARGS__}))), \
+		ARR_LEN ((ptr []) {__VA_ARGS__}), \
 		(ptr []) {__VA_ARGS__}, \
 		(nil (*) (ptr)) drawable_draw \
 	)
@@ -70,7 +70,7 @@ ext nil drawable_draw (drawable_t * drawable);
 ext nil drawable_free (drawable_t * drawable);
 # define DRAWABLE_FREE(...) \
 	arr_for_all ( \
-		(ARR_LEN (((drawable_t * []) {__VA_ARGS__}))), \
+		ARR_LEN ((ptr []) {__VA_ARGS__}), \
 		(ptr []) {__VA_ARGS__}, \
 		(nil (*) (ptr)) drawable_free \
 	)

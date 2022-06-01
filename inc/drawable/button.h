@@ -8,8 +8,7 @@ struct button {
 	struct drawable_t;
 	texture_t * texture;
 	str string;
-	color_t * color_active;
-	color_t * color_inactive;
+	color_t * color [2];
 	font_t * font;
 	nil (* function) ();
 };
@@ -20,11 +19,13 @@ ext nil button_press (struct button * button);
 ext nil button_select (struct button * button);
 ext nil button_unselect (struct button * button);
 
-ext drawable_t * button_new (struct button button);
+ext struct button * button_new (struct button button);
 # define BUTTON_NEW(string_, ...) \
 	button_new ( \
 		(struct button) { \
 			DRAWABLE_DEFAULT, \
+			.font = FONT_DEFAULT, \
+			.string = string_, \
 			__VA_ARGS__ \
 		} \
 	)

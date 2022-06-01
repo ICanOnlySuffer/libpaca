@@ -11,27 +11,19 @@ nil text_free (drawable_t * text) {
 	texture_free (((struct text *) text) -> texture);
 }
 
-nil text_renew (
-	struct text * text,
-	str string,
-	color_t * color,
-	font_t * font
-) {
-	text -> color = color;
-	text -> font = font;
-	
+nil text_renew (struct text * text) {
 	surface_extract (
-		text_render (string, font, color),
+		text_render (text -> string, text -> font, text -> color),
 		&text -> texture,
 		&text -> w,
 		&text -> h
 	);
 }
 
-drawable_t * text_new (str string, struct text text) {
-	text_renew (&text, string, text.color, text.font);
+struct text * text_new (struct text text) {
+	text_renew (&text);
 	text.free = text_free;
 	text.draw = text_draw;
-	ret DRAWABLE_NEW (text);
+	ret (struct text *) DRAWABLE_NEW (text);
 }
 
