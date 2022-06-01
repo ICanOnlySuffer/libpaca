@@ -90,9 +90,9 @@ ext nil texture_free (texture_t * texture);
 
 # define TEXTURE_FREE(...) \
 	arr_for_all ( \
-		(ARR_LEN ((texture_t * []) {__VA_ARGS__})), \
-		(texture_t * []) {__VA_ARGS__}, \
-		(nil (*) (ptr)) texture_free \
+		ARR_LEN ((texture_t * []) {__VA_ARGS__}), \
+		(ptr []) {__VA_ARGS__}, \
+		(prc) texture_free \
 	)
 
 /* surface */
