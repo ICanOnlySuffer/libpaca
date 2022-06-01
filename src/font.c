@@ -4,6 +4,8 @@
 
 static vector_t FONTS;
 
+font_t * FONT_DEFAULT = NIL;
+
 nil font_close (TTF_Font * font) {
 	LOG ("Font.close %x", (u64) font);
 	TTF_CloseFont (font);

@@ -7,6 +7,8 @@
 
 typedef TTF_Font font_t;
 
+ext font_t * FONT_DEFAULT;
+
 ext nil font_close (font_t * font);
 ext nil font_quit ();
 ext u08 font_init ();
