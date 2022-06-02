@@ -21,7 +21,7 @@ nil drawable_free (drawable_t * drawable) {
 	}
 }
 
-nil drawable_quit () {
+static nil drawable_quit_proc () {
 	str proc = "Drawable.quit";
 	proc_init (proc);
 	LOG ("DRAWABLES.for_each &:free", 0);
@@ -29,11 +29,16 @@ nil drawable_quit () {
 	proc_quit (proc);
 }
 
+static proc_t drawable_quit = {
+	.proc = (prc) drawable_quit_proc,
+	.name = "Drawable.quit"
+};
+
 nil drawable_init () {
 	str proc = "Drawable.init";
 	proc_init (proc);
 	DRAWABLES = vector_new ("DRAWABLES", 4);
-	at_quit_psh (drawable_quit);
+	at_quit_psh (&drawable_quit);
 	proc_quit (proc);
 }
 

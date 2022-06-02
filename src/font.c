@@ -11,7 +11,7 @@ nil font_close (TTF_Font * font) {
 	TTF_CloseFont (font);
 }
 
-nil font_quit () {
+static nil font_quit_proc () {
 	str proc = "Font.quit";
 	proc_init (proc);
 	
@@ -23,6 +23,11 @@ nil font_quit () {
 	proc_quit (proc);
 }
 
+static proc_t font_quit = {
+	.proc = (prc) font_quit_proc,
+	.name = "Font.quit"
+};
+
 u08 font_init () {
 	str proc = "Font.init";
 	proc_init (proc);
@@ -33,7 +38,7 @@ u08 font_init () {
 		ret false;
 	}
 	FONTS = vector_new ("FONTS", 4);
-	at_quit_psh (font_quit);
+	at_quit_psh (&font_quit);
 	
 	proc_quit (proc);
 	ret true;

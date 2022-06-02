@@ -27,12 +27,20 @@ ext u08 WINDOW_DELAY;
 ext color_t * WINDOW_COLOR;
 
 /* window */
-ext nil window_quit ();
+inl window_t * window_new (str name, u16 width, u16 height) {
+	ret SDL_CreateWindow (
+		name,
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		width,
+		height,
+		0
+	);
+}
+
 ext u08 window_init (str name, u64 w, u64 h, u08 delay);
 
 /* renderer */
-ext nil renderer_quit ();
-
 inl nil render_set_draw_color (color_t * color) {
 	SDL_SetRenderDrawColor (
 		RENDERER,
@@ -80,8 +88,6 @@ inl nil render_present () {
 }
 
 /* texture */
-ext nil texture_quit ();
-
 inl texture_t * texture_from_surface (surface_t * surface) {
 	return SDL_CreateTextureFromSurface (RENDERER, surface);
 }

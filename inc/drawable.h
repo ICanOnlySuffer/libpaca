@@ -7,15 +7,18 @@
 
 typedef SDL_FPoint point_t;
 
+# define DRAWABLE_STRUCT \
+	f32 x; \
+	f32 y; \
+	f32 w; \
+	f32 h; \
+	f32 dx; \
+	f32 dy; \
+	nil (* draw) (struct drawable_t * drawable); \
+	nil (* free) (struct drawable_t * drawable)
+
 typedef struct drawable_t {
-	f32 x;
-	f32 y;
-	f32 w;
-	f32 h;
-	f32 dx;
-	f32 dy;
-	nil (* draw) (struct drawable_t * drawable);
-	nil (* free) (struct drawable_t * drawable);
+	DRAWABLE_STRUCT;
 } drawable_t;
 
 inl f32 drawable_v (drawable_t * drawable) {
@@ -54,6 +57,11 @@ inl nil drawable_center_y (drawable_t * drawable) {
 	drawable -> y = (WINDOW_H - drawable -> h) / 2;
 }
 
+inl nil drawable_center (drawable_t * drawable) {
+	drawable_center_x (drawable);
+	drawable_center_y (drawable);
+}
+
 inl nil drawable_update (drawable_t * drawable) {
 	drawable -> x += drawable -> dx;
 	drawable -> y += drawable -> dy;
@@ -75,7 +83,6 @@ ext nil drawable_free (drawable_t * drawable);
 		(nil (*) (ptr)) drawable_free \
 	)
 
-ext nil drawable_quit ();
 ext nil drawable_init ();
 
 ext drawable_t * drawable_new (u16 size, drawable_t * params);

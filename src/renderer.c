@@ -11,30 +11,48 @@ u16 WINDOW_H;
 u08 WINDOW_DELAY;
 color_t * WINDOW_COLOR = &window_default_color;
 
-nil window_quit () {
+static nil window_destroy_proc () {
 	LOG ("WINDOW.destroy", 0);
 	SDL_DestroyWindow (WINDOW);
 }
+
+static nil renderer_destroy_proc () {
+	LOG ("RENDERER.destroy", 0);
+	SDL_DestroyRenderer (RENDERER);
+}
+
+static nil texture_destroy_proc () {
+	LOG ("TEXTURE.destroy", 0);
+	texture_free (TEXTURE);
+}
+
+static proc_t window_destroy = {
+	.proc = (prc) window_destroy_proc,
+	.name = "WINDOW.destroy"
+};
+
+static proc_t renderer_destroy = {
+	.proc = (prc) renderer_destroy_proc,
+	.name = "RENDERER.destroy"
+};
+
+static proc_t texture_destroy = {
+	.proc = (prc) texture_destroy_proc,
+	.name = "TEXTURE.destroy"
+};
 
 u08 window_init (str name, u64 w, u64 h, u08 delay) {
 	str proc = "Window.init";
 	proc_init (proc);
 	
 	LOG ("WINDOW = Window.new \"%s\", %u, %u", (u64) name, w, h);
-	WINDOW = SDL_CreateWindow (
-		name,
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		w,
-		h,
-		0
-	);
+	WINDOW = window_new (name, w, h);
 	if (not WINDOW) {
 		LOG_ERR ("Window.new: %s", (u64) SDL_GetError ());
 		proc_quit (proc);
-		return false;
+		ret false;
 	}
-	at_quit_psh (window_quit);
+	at_quit_psh (&window_destroy);
 	
 	LOG ("RENDERER = Renderer.new WINDOW", 0);
 	RENDERER = SDL_CreateRenderer (
@@ -45,9 +63,9 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 	if (not RENDERER) {
 		LOG_ERR ("Renderer.new: %s", (u64) SDL_GetError ());
 		proc_quit (proc);
-		return false;
+		ret false;
 	}
-	at_quit_psh (renderer_quit);
+	at_quit_psh (&renderer_destroy);
 	
 	LOG ("TEXTURE = Texture.new RENDERER, %u, %u", w, h);
 	TEXTURE = SDL_CreateTexture (
@@ -60,30 +78,21 @@ u08 window_init (str name, u64 w, u64 h, u08 delay) {
 	if (not TEXTURE) {
 		LOG_ERR ("Texture.new: %s", (u64) SDL_GetError ());
 		proc_quit (proc);
-		return false;
+		ret false;
 	}
-	at_quit_psh (texture_quit);
+	at_quit_psh (&texture_destroy);
 	
 	WINDOW_W = w;
 	WINDOW_H = h;
 	WINDOW_DELAY = delay;
 	
 	proc_quit (proc);
-	return true;
+	ret true;
 }
 
 /* renderer */
-nil renderer_quit () {
-	LOG ("RENDERER.destroy", 0);
-	SDL_DestroyRenderer (RENDERER);
-}
 
 /* texture */
-nil texture_quit () {
-	LOG ("TEXTURE.destroy", 0);
-	texture_free (TEXTURE);
-}
-
 nil texture_free (texture_t * texture) {
 	SDL_DestroyTexture (texture);
 }
