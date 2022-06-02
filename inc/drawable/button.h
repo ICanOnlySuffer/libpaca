@@ -5,7 +5,7 @@
 # include "../font.h"
 
 struct button {
-	struct drawable_t;
+	DRAWABLE_STRUCT;
 	texture_t * texture;
 	str string;
 	color_t * color [2];

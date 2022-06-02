@@ -5,7 +5,7 @@
 # include "../font.h"
 
 struct text {
-	struct drawable_t;
+	DRAWABLE_STRUCT;
 	texture_t * texture;
 	str string;
 	font_t * font;

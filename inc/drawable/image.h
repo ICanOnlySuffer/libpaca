@@ -9,7 +9,7 @@ ext nil image_draw (drawable_t * image);
 ext nil image_free (drawable_t * image);
 
 struct image {
-	struct drawable_t;
+	DRAWABLE_STRUCT;
 	texture_t * texture;
 };
 ext struct image * image_new (str path, struct image image);

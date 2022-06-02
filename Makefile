@@ -29,7 +29,7 @@ DIRS = $(INSTALL_INC_DIR)/pge/ \
 
 SRC = $(shell find src -type f ! -name version.c)
 
-C_FLAGS = -fms-extensions -O3 -Wall
+C_FLAGS = -fms-extensions -O3 -Wall -pedantic
 
 %/:
 	mkdir -p $@

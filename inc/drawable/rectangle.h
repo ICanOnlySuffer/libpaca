@@ -8,7 +8,7 @@ ext nil rectangle_draw_full (drawable_t * rectangle);
 ext nil rectangle_free (drawable_t * rectangle);
 
 struct rectangle {
-	struct drawable_t;
+	DRAWABLE_STRUCT;
 	color_t * color;
 };
 
