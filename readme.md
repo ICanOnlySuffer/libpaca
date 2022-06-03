@@ -4,7 +4,7 @@ Simple game engine library built on top of [SDL](https://libsdl.org).
 It is made to ease the creation of basic 2D games while also keeping
 them readable and easy to debug.
 
-Compiles for GNU+Linux and Mingw (from withing GNU+Linux).
+Compiles for GNU+Linux and Mingw (from within GNU+Linux).
 
 ## Installation
 
