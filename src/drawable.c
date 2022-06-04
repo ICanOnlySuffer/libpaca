@@ -4,8 +4,8 @@
 
 static vector_t DRAWABLES;
 
-nil drawable_draw (drawable_t * drawable) {
-	drawable -> draw (drawable);
+nil drawable_draw (ptr drawable) {
+	((drawable_t *) drawable) -> draw ((drawable_t *) drawable);
 }
 
 nil drawable_free (drawable_t * drawable) {
