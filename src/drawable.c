@@ -22,25 +22,24 @@ nil drawable_free (drawable_t * drawable) {
 }
 
 static nil drawable_quit_proc () {
-	str proc = "Drawable.quit";
-	proc_init (proc);
 	LOG ("DRAWABLES.for_each &:free", 0);
 	vec_for_all ((vec *) &DRAWABLES, (prc) drawable_free);
-	proc_quit (proc);
 }
 
-static proc_t drawable_quit = {
-	.proc = (prc) drawable_quit_proc,
-	.name = "Drawable.quit"
-};
+static proc_t drawable_quit = PROC (
+	"Drawable_quit",
+	drawable_quit_proc
+);
 
-nil drawable_init () {
-	str proc = "Drawable.init";
-	proc_init (proc);
+static nil drawable_init_proc () {
 	DRAWABLES = vector_new ("DRAWABLES", 4);
 	at_quit_psh (&drawable_quit);
-	proc_quit (proc);
 }
+
+proc_t drawable_init = PROC (
+	"Drawable.init",
+	drawable_init_proc
+);
 
 drawable_t * drawable_new (u16 size, drawable_t * params) {
 	drawable_t * drawable = malloc (size);

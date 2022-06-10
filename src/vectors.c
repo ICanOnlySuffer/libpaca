@@ -71,45 +71,43 @@ nil vectors_on_update () {
 
 nil vectors_on_event (event_t * event) {
 	for (u08 i = 0; i < ON_EVENT.size; i++) {
-		((nil (*) (event_t *)) ((proc_t *) ON_EVENT.items [i]) -> proc) (event);
+		(
+			(nil (*) (event_t *)) ((proc_t *) ON_EVENT.items [i]
+		) -> proc) (event);
 	}
 }
 
-nil vectors_at_quit () {
-	str proc = "Vectors.at_quit";
-	proc_init (proc);
+static nil vectors_at_quit_proc () {
 	for (u08 i = AT_QUIT.size - 1; i; i--) {
 		((nil (*) ()) ((proc_t *) AT_QUIT.items [i]) -> proc) ();
 	}
-	proc_quit (proc);
 }
+proc_t vectors_at_quit = PROC (
+	"Vectors.at_quit",
+	vectors_at_quit_proc
+);
 
 static nil vectors_quit_proc () {
-	str proc = "Vectors.quit";
-	proc_init (proc);
-	
 	vector_free (&ON_UPDATE);
 	vector_free (&ON_EVENT);
 	vector_free (&AT_QUIT);
-	
-	proc_quit (proc);
 }
 
-static proc_t vectors_quit = {
-	.proc = (prc) vectors_quit_proc,
-	.name = "Vectors.quit"
-};
+static proc_t vectors_quit = PROC (
+	"Vectors.quit",
+	vectors_quit_proc
+);
 
-nil vectors_init () {
-	str proc = "Vectors.init";
-	proc_init (proc);
-	
+static nil vectors_init_proc () {
 	ON_UPDATE = vector_new ("ON_UPDATE", 4);
 	ON_EVENT = vector_new ("ON_EVENT", 4);
 	AT_QUIT = vector_new ("AT_QUIT", 4);
 	
 	at_quit_psh (&vectors_quit);
-	
-	proc_quit (proc);
 }
+
+proc_t vectors_init = PROC (
+	"Vectors.init",
+	vectors_init_proc
+);
 

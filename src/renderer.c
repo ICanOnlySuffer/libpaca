@@ -6,53 +6,40 @@ static color_t window_default_color = {0, 0, 0, 255};
 window_t * WINDOW;
 renderer_t * RENDERER;
 texture_t * TEXTURE;
+static str WINDOW_NAME;
 u16 WINDOW_W;
 u16 WINDOW_H;
 u08 WINDOW_DELAY;
 color_t * WINDOW_COLOR = &window_default_color;
 
-static nil window_destroy_proc () {
-	LOG ("WINDOW.destroy", 0);
-	SDL_DestroyWindow (WINDOW);
+static nil _window_destroy () {
+	if (WINDOW) {
+		LOG ("WINDOW.destroy", 0);
+		SDL_DestroyWindow (WINDOW);
+	}
+	if (RENDERER) {
+		LOG ("RENDERER.destroy", 0);
+		SDL_DestroyRenderer (RENDERER);
+	}
+	if (TEXTURE) {
+		LOG ("TEXTURE.destroy", 0);
+		texture_free (TEXTURE);
+	}
 }
 
-static nil renderer_destroy_proc () {
-	LOG ("RENDERER.destroy", 0);
-	SDL_DestroyRenderer (RENDERER);
-}
+static proc_t window_destroy = PROC (
+	"Window.destroy",
+	_window_destroy
+);
 
-static nil texture_destroy_proc () {
-	LOG ("TEXTURE.destroy", 0);
-	texture_free (TEXTURE);
-}
-
-static proc_t window_destroy = {
-	.proc = (prc) window_destroy_proc,
-	.name = "WINDOW.destroy"
-};
-
-static proc_t renderer_destroy = {
-	.proc = (prc) renderer_destroy_proc,
-	.name = "RENDERER.destroy"
-};
-
-static proc_t texture_destroy = {
-	.proc = (prc) texture_destroy_proc,
-	.name = "TEXTURE.destroy"
-};
-
-u08 window_init (str name, u64 w, u64 h, u08 delay) {
-	str proc = "Window.init";
-	proc_init (proc);
-	
+u08 window_init_proc (str name, u64 w, u64 h, u08 delay) {
+	at_quit_psh (&window_destroy);
 	LOG ("WINDOW = Window.new \"%s\", %u, %u", (u64) name, w, h);
 	WINDOW = window_new (name, w, h);
 	if (not WINDOW) {
 		LOG_ERR ("Window.new: %s", (u64) SDL_GetError ());
-		proc_quit (proc);
 		ret false;
 	}
-	at_quit_psh (&window_destroy);
 	
 	LOG ("RENDERER = Renderer.new WINDOW", 0);
 	RENDERER = SDL_CreateRenderer (

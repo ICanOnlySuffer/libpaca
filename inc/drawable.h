@@ -4,6 +4,7 @@
 # include <SDL2/SDL_render.h>
 # include <pul/vec.h>
 # include "renderer.h"
+# include "proc.h"
 
 typedef SDL_FPoint point_t;
 
@@ -75,7 +76,7 @@ ext nil drawable_free (drawable_t * drawable);
 		(nil (*) (ptr)) drawable_free \
 	)
 
-ext nil drawable_init ();
+ext proc_t drawable_init;
 
 ext drawable_t * drawable_new (u16 size, drawable_t * params);
 

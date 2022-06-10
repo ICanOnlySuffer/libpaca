@@ -10,12 +10,6 @@
 # include <pul/vec.h>
 # include <pul/put.h>
 
-nil arr_for_all (u08 length, ptr array [], nil (*function) (ptr)) {
-	for (u08 i = 0; i < length; i++) {
-		function (array [i]);
-	}
-}
-
 u08 run = true;
 
 u08 init (str title, u16 width, u16 height, u08 delay) {
