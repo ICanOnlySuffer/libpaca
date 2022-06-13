@@ -16,19 +16,21 @@ static u08 n_spaces = 0;
 
 nil log_format (u08 error, str format, u64 pointers []) {
 	chr buffer [128];
-	str_frm_fmt (buffer, format, pointers + sizeof (u64));
+	str_frm_fmt (buffer, format, pointers);
 	PUT (SPACES, error ? ERR_STR : "", buffer, END_STR "\n");
 }
 
-nil log_proc (proc_t * proc) {
+u08 log_proc (proc_t * proc) {
 	PUT (SPACES, PRC_STR, proc -> name, " {" END_STR "\n");
 	SPACES [n_spaces * 2] = ' ';
 	SPACES [++n_spaces * 2] = 0;
 	
-	((nil (*) ()) proc -> proc) ();
+	u08 output = ((u08 (*) ()) proc -> proc) ();
 	
 	SPACES [n_spaces * 2] = ' ';
 	SPACES [--n_spaces * 2] = 0;
 	PUT (SPACES, PRC_STR "} ", proc -> name, END_STR "\n");
+	
+	ret output;
 }
 

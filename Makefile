@@ -8,7 +8,7 @@ PLATFORM := gnu+linux
 ifeq ($(PLATFORM), gnu+linux)
 	INC_DIR = /usr/include
 	LIB_DIR = /usr/lib
-	LIB     = libpge.so
+	LIB     = libpge.a
 	CC     := cc
 else
 ifeq ($(PLATFORM), mingw)
@@ -28,19 +28,25 @@ DIRS = $(INSTALL_INC_DIR)/pge/ \
        $(INSTALL_LIB_DIR)/
 
 SRC = $(shell find src -type f ! -name version.c)
+OBJ = $(SRC:src/%.c=lib/%.o)
+SRC_DIRS = $(shell find src -type d)
+OBJ_DIRS = lib/ $(SRC_DIRS:src%=lib%/)
 
-C_FLAGS = -fms-extensions -O3 -Wall -pedantic
+C_FLAGS = -O3 -Wall -pedantic
+
+all: inc/version.h $(OBJ_DIRS) lib/$(LIB)
 
 %/:
 	mkdir -p $@
 
-lib/$(LIB): lib/
-	$(CC) -shared -fPIC $(SRC) $(C_FLAGS) -o $@
+lib/%.o: src/%.c
+	$(CC) $< -c -o $@ $(C_FLAGS)
+
+lib/$(LIB): $(OBJ)
+	ar rcs $@ $(OBJ)
 
 inc/version.h: src/version.c
 	printf "`cat $<`" $(MAYOR) $(MINOR) $(PATCH) > $@
-
-all: inc/version.h lib/$(LIB)
 
 install: all uninstall $(INSTALL_INC_DIR)/pge/ $(INSTALL_LIB_DIR)/
 	cp -ru inc/* $(INSTALL_INC_DIR)/pge

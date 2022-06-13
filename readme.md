@@ -11,7 +11,7 @@ Compiles for GNU+Linux and Mingw (from within GNU+Linux).
 **dependencies:**
 
 - [SDL](https://libsdl.org/download-2.0.php) (make & runtime)
-- [pul](https://gitlab.com/ICanOnlySuffer/pul) (make & runtime)
+- [pul](https://gitlab.com/ICanOnlySuffer/pul) (make)
 
 **commands:**
 
@@ -21,7 +21,7 @@ Compiles for GNU+Linux and Mingw (from within GNU+Linux).
 
 **compilation:**
 
-	$ cc -lpul -lpge -lSDL2 -lSDL_ttf -lSDL2_image main.c
+	$ cc main.c -lpge -lpul -lSDL2 -lSDL_ttf -lSDL2_image
 
 ## Examples
 
