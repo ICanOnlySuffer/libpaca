@@ -3,10 +3,10 @@
 
 static color_t window_default_color = {0, 0, 0, 255};
 
-window_t * WINDOW;
-renderer_t * RENDERER;
-texture_t * TEXTURE;
-static str WINDOW_NAME;
+window_t * WINDOW = NIL;
+renderer_t * RENDERER = NIL;
+texture_t * TEXTURE = NIL;
+str WINDOW_TITLE;
 u16 WINDOW_W;
 u16 WINDOW_H;
 u08 WINDOW_DELAY;
@@ -32,50 +32,42 @@ static proc_t window_destroy = PROC (
 	_window_destroy
 );
 
-u08 window_init_proc (str name, u64 w, u64 h, u08 delay) {
+static u08 _window_init () {
 	at_quit_psh (&window_destroy);
-	LOG ("WINDOW = Window.new \"%s\", %u, %u", (u64) name, w, h);
-	WINDOW = window_new (name, w, h);
+	
+	LOG (
+		"WINDOW = Window.new \"%s\", %u, %u",
+		(u64) WINDOW_TITLE, WINDOW_W, WINDOW_H
+	);
+	WINDOW = window_new (WINDOW_TITLE, WINDOW_W, WINDOW_H);
 	if (not WINDOW) {
 		LOG_ERR ("Window.new: %s", (u64) SDL_GetError ());
 		ret false;
 	}
 	
 	LOG ("RENDERER = Renderer.new WINDOW", 0);
-	RENDERER = SDL_CreateRenderer (
-		WINDOW,
-		-1,
-		SDL_RENDERER_PRESENTVSYNC
-	);
+	RENDERER = renderer_new (WINDOW);
 	if (not RENDERER) {
 		LOG_ERR ("Renderer.new: %s", (u64) SDL_GetError ());
-		proc_quit (proc);
 		ret false;
 	}
-	at_quit_psh (&renderer_destroy);
 	
-	LOG ("TEXTURE = Texture.new RENDERER, %u, %u", w, h);
-	TEXTURE = SDL_CreateTexture (
-		RENDERER,
-		SDL_PIXELFORMAT_RGBA8888,
-		SDL_TEXTUREACCESS_TARGET,
-		w,
-		h
+	LOG (
+		"TEXTURE = Texture.new RENDERER, %u, %u",
+		WINDOW_W, WINDOW_H
 	);
+	TEXTURE = texture_new (RENDERER, WINDOW_W, WINDOW_H);
 	if (not TEXTURE) {
 		LOG_ERR ("Texture.new: %s", (u64) SDL_GetError ());
-		proc_quit (proc);
 		ret false;
 	}
-	at_quit_psh (&texture_destroy);
 	
-	WINDOW_W = w;
-	WINDOW_H = h;
-	WINDOW_DELAY = delay;
-	
-	proc_quit (proc);
 	ret true;
 }
+proc_t window_init = PROC (
+	"Window.init",
+	_window_init
+);
 
 /* renderer */
 

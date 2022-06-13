@@ -21,6 +21,7 @@ typedef SDL_Rect rect_t;
 ext window_t * WINDOW;
 ext renderer_t * RENDERER;
 ext texture_t * TEXTURE;
+ext str WINDOW_TITLE;
 ext u16 WINDOW_W;
 ext u16 WINDOW_H;
 ext u08 WINDOW_DELAY;
@@ -38,7 +39,7 @@ inl window_t * window_new (str name, u16 width, u16 height) {
 	);
 }
 
-ext u08 window_init (str name, u64 w, u64 h, u08 delay);
+ext proc_t window_init;
 
 /* renderer */
 inl nil render_set_draw_color (color_t * color) {
@@ -87,6 +88,10 @@ inl nil render_present () {
 	SDL_RenderPresent (RENDERER);
 }
 
+inl renderer_t * renderer_new (window_t * window) {
+	ret SDL_CreateRenderer (window, -1, SDL_RENDERER_PRESENTVSYNC);
+}
+
 /* texture */
 inl texture_t * texture_from_surface (surface_t * surface) {
 	return SDL_CreateTextureFromSurface (RENDERER, surface);
@@ -100,6 +105,16 @@ ext nil texture_free (texture_t * texture);
 		(ptr []) {__VA_ARGS__}, \
 		(prc) texture_free \
 	)
+
+inl texture_t * texture_new (renderer_t * renderer, u16 w, u16 h) {
+	ret SDL_CreateTexture (
+		renderer,
+		SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_TARGET,
+		w,
+		h
+	);
+}
 
 /* surface */
 inl nil surface_free (surface_t * surface) {

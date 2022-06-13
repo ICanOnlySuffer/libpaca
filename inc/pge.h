@@ -6,9 +6,8 @@
 # include "proc.h"
 
 ext u08 run;
-ext u08 pge_init (str title, u16 width, u16 height, u08 delay);
-ext nil pge_loop ();
-ext nil pge_quit ();
+ext u08 init (str title, u16 width, u16 height, u08 delay);
+ext nil loop ();
 
 # endif // PGE_H
 

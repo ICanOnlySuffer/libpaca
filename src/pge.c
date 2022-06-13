@@ -12,43 +12,48 @@
 
 u08 run = true;
 
-u08 init (str title, u16 width, u16 height, u08 delay) {
-	str proc = "init";
-	proc_init (proc);
-	
+static nil _quit () {
+	log_proc (&vectors_at_quit);
+	LOG ("SDL.quit", 0);
+	SDL_Quit ();
+}
+static proc_t quit = PROC (
+	"quit",
+	_quit
+);
+
+static u08 _pge_init () {
 	LOG ("SDL.init", 0);
 	if (SDL_Init (SDL_INIT_VIDEO)) {
 		LOG_ERR ("SDL.init: %s", (u64) SDL_GetError ());
-		proc_quit (proc);
-		return false;
+		ret false;
 	}
 	
-	vectors_init ();
-	drawable_init ();
-	font_init ();
-	if (not window_init (title, width, height, delay)) {
-		proc_quit (proc);
-		quit ();
-		return false;
+	log_proc (&vectors_init);
+	log_proc (&drawable_init);
+	log_proc (&font_init);
+	if (not log_proc (&window_init)) {
+		log_proc (&quit);
+		ret false;
 	}
 	
-	proc_quit (proc);
-	return true;
+	ret true;
 }
+static proc_t pge_init = PROC (
+	"pge.init",
+	_pge_init
+);
 
-nil quit () {
-	str proc = "quit";
-	proc_init (proc);
-	vectors_at_quit ();
-	LOG ("SDL.quit", 0);
-	SDL_Quit ();
-	proc_quit (proc);
+u08 init (str title, u16 width, u16 height, u08 delay) {
+	WINDOW_TITLE = title;
+	WINDOW_W = width;
+	WINDOW_H = height;
+	WINDOW_DELAY = delay;
+	ret log_proc (&pge_init);
 }
 
 nil loop () {
-	str proc = "loop";
-	proc_init (proc);
-	SDL_Event event;
+	event_t event;
 	
 	do {
 		render_set_target (TEXTURE);
@@ -67,7 +72,6 @@ nil loop () {
 		SDL_Delay (WINDOW_DELAY);
 	} while (run);
 	
-	proc_quit (proc);
-	quit ();
+	log_proc (&quit);
 }
 
