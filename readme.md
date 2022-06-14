@@ -6,7 +6,11 @@ them readable and easy to debug.
 
 Compiles for GNU+Linux and Mingw (from within GNU+Linux).
 
+Still on development, not recommended to use just yet.
+
 ## Installation
+
+Available at the [AUR](https://aur.archlinux.org/packages/pge)
 
 **dependencies:**
 
