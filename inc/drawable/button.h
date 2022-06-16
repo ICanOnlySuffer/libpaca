@@ -1,6 +1,6 @@
 
-# ifndef PGE_DRAWABLE_BUTTON_H
-# define PGE_DRAWABLE_BUTTON_H
+# ifndef LIBPACA_DRAWABLE_BUTTON_H
+# define LIBPACA_DRAWABLE_BUTTON_H
 # include "../drawable.h"
 # include "../font.h"
 
@@ -30,5 +30,5 @@ ext struct button * button_new (struct button button);
 		} \
 	)
 
-# endif // PGE_DRAWABLE_BUTTON_H
+# endif // LIBPACA_DRAWABLE_BUTTON_H
 

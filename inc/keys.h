@@ -1,6 +1,6 @@
 
-# ifndef PGE_KEYS
-# define PGE_KEYS
+# ifndef LIBPACA_KEYS
+# define LIBPACA_KEYS
 
 enum KEYS {
 	KEY_ENTER        = 13,
@@ -13,5 +13,5 @@ enum KEYS {
 	KEY_LEFT_CONTROL = 1073742048
 };
 
-# endif // PGE_KEYS
+# endif // LIBPACA_KEYS
 

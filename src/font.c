@@ -22,16 +22,17 @@ nil font_close (TTF_Font * font) {
 }
 
 // quit
-static nil font_quit_proc () {
+static u08 _font_quit () {
 	vec_for_all ((vec *) &FONTS, (prc) font_close);
 	LOG ("FONTS.free", 0);
 	free (FONTS.items);
 	TTF_Quit ();
+	ret true;
 }
-static proc_t font_quit = PROC ("Font.quit", font_quit_proc);
+static proc_t font_quit = {"Font.quit", _font_quit};
 
 // init
-static u08 font_init_proc () {
+static u08 _font_init () {
 	if (TTF_Init ()) { // 0 == success for some reason
 		LOG ("font_init: %s", (u64) SDL_GetError ());
 		ret false;
@@ -40,5 +41,5 @@ static u08 font_init_proc () {
 	at_quit_psh (&font_quit);
 	ret true;
 }
-proc_t font_init = PROC ("Font.init", font_init_proc);
+proc_t font_init = {"Font.init", _font_init};
 

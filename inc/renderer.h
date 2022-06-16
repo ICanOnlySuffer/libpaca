@@ -1,13 +1,13 @@
 
-# ifndef PGE_RENDERER_H
-# define PGE_RENDERER_H
+# ifndef LIBPACA_RENDERER_H
+# define LIBPACA_RENDERER_H
 # define SDL_MAIN_HANDLED
 # include <SDL2/SDL_surface.h>
 # include <SDL2/SDL_render.h>
 # include <SDL2/SDL_video.h>
 # include <SDL2/SDL_image.h>
-# include <pul/vec.h>
-# include "pge.h"
+# include <pocha/vec.h>
+# include "paca.h"
 # include "log.h"
 
 typedef SDL_Renderer renderer_t;
@@ -134,5 +134,5 @@ ext nil surface_replace (
 	color_t * replacement
 );
 
-# endif // PGE_SURFACE_H
+# endif // LIBPACA_SURFACE_H
 

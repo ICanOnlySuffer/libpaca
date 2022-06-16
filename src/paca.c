@@ -2,27 +2,25 @@
 # include "../inc/drawable.h"
 # include "../inc/vectors.h"
 # include "../inc/font.h"
-# include "../inc/pge.h"
+# include "../inc/paca.h"
 
 # include <SDL2/SDL_image.h>
 # include <SDL2/SDL_ttf.h>
+# include <pocha/vec.h>
+# include <pocha/put.h>
 # include <SDL2/SDL.h>
-# include <pul/vec.h>
-# include <pul/put.h>
 
 u08 run = true;
 
-static nil _quit () {
+static u08 _quit () {
 	log_proc (&vectors_at_quit);
 	LOG ("SDL.quit", 0);
 	SDL_Quit ();
+	ret 1;
 }
-static proc_t quit = PROC (
-	"quit",
-	_quit
-);
+static proc_t quit = {"quit", _quit};
 
-static u08 _pge_init () {
+static u08 _paca_init () {
 	LOG ("SDL.init", 0);
 	if (SDL_Init (SDL_INIT_VIDEO)) {
 		LOG_ERR ("SDL.init: %s", (u64) SDL_GetError ());
@@ -39,17 +37,14 @@ static u08 _pge_init () {
 	
 	ret true;
 }
-static proc_t pge_init = PROC (
-	"pge.init",
-	_pge_init
-);
+static proc_t paca_init = {"paca.init", _paca_init};
 
 u08 init (str title, u16 width, u16 height, u08 delay) {
 	WINDOW_TITLE = title;
 	WINDOW_W = width;
 	WINDOW_H = height;
 	WINDOW_DELAY = delay;
-	ret log_proc (&pge_init);
+	ret log_proc (&paca_init);
 }
 
 nil loop () {

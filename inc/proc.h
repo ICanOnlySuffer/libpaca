@@ -1,14 +1,12 @@
 
-# ifndef PGE_PROC_H
-# define PGE_PROC_H
-# include <pul/cor.h>
+# ifndef LIBPACA_PROC_H
+# define LIBPACA_PROC_H
+# include <pocha/cor.h>
 
 typedef struct {
-	u08 (*proc) ();
 	str name;
+	u08 (*proc) ();
 } proc_t;
 
-# define PROC(name_, proc_) {(u08 (*) ()) proc_, name_}
-
-# endif // PGE_PROC_H
+# endif // LIBPACA_PROC_H
 

@@ -1,12 +1,11 @@
 
-# define PGE_VERSION_MAYOR %s
-# define PGE_VERSION_MINOR %s
-# define PGE_VERSION_PATCH %s
+# define LIBPACA_VERSION_MAYOR %s
+# define LIBPACA_VERSION_MINOR %s
+# define LIBPACA_VERSION_PATCH %s
 
 /*
-,-, ,-, ,-, Pocha's Game engine
-|_' | _ |_
-|   | | |   Copyright (c) 2022 Piero Estéfano Rojas Effio
-'   '-' '-' GNU General Public License v3.0
+	libpaca
+	Copyright (c) 2022 Piero Rojas
+	GNU General Public License v3.0
 */
 

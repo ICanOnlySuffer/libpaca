@@ -1,9 +1,9 @@
 
-# ifndef PGE_VECTORS_H
-# define PGE_VECTORS_H
+# ifndef LIBPACA_VECTORS_H
+# define LIBPACA_VECTORS_H
 # define SDL_MAIN_HANDLED
 # include <SDL2/SDL_events.h>
-# include <pul/vec.h>
+# include <pocha/vec.h>
 # include "proc.h"
 
 typedef SDL_Event event_t;
@@ -35,5 +35,5 @@ ext proc_t vectors_at_quit;
 
 ext proc_t vectors_init;
 
-# endif // PGE_VECTORS_H
+# endif // LIBPACA_VECTORS_H
 

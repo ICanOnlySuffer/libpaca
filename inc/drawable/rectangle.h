@@ -1,6 +1,6 @@
 
-# ifndef PGE_DRAWABLE_RECTANGLE_H
-# define PGE_DRAWABLE_RECTANGLE_H
+# ifndef LIBPACA_DRAWABLE_RECTANGLE_H
+# define LIBPACA_DRAWABLE_RECTANGLE_H
 # include "../drawable.h"
 
 ext nil rectangle_draw_lines (drawable_t * rectangle);
@@ -23,5 +23,5 @@ ext struct rectangle * rectangle_new (struct rectangle rectangle);
 		} \
 	)
 
-# endif // PGE_DRAWABLE_RECTANGLE_H
+# endif // LIBPACA_DRAWABLE_RECTANGLE_H
 

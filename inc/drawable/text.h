@@ -1,6 +1,6 @@
 
-# ifndef PGE_DRAWABLE_TEXT_H
-# define PGE_DRAWABLE_TEXT_H
+# ifndef LIBPACA_DRAWABLE_TEXT_H
+# define LIBPACA_DRAWABLE_TEXT_H
 # include "../drawable.h"
 # include "../font.h"
 
@@ -35,5 +35,5 @@ ext struct text * text_new (struct text text);
 		} \
 	)
 
-# endif // PGE_DRAWABLE_TEXT_H
+# endif // LIBPACA_DRAWABLE_TEXT_H
 

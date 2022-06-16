@@ -1,6 +1,6 @@
 # include "../inc/drawable.h"
 # include "../inc/vectors.h"
-# include <pul/str.h>
+# include <pocha/str.h>
 
 static vector_t DRAWABLES;
 
@@ -21,25 +21,19 @@ nil drawable_free (drawable_t * drawable) {
 	}
 }
 
-static nil drawable_quit_proc () {
+static u08 _drawable_quit () {
 	LOG ("DRAWABLES.for_each &:free", 0);
 	vec_for_all ((vec *) &DRAWABLES, (prc) drawable_free);
+	ret true;
 }
+static proc_t drawable_quit = {"Drawable_quit", _drawable_quit};
 
-static proc_t drawable_quit = PROC (
-	"Drawable_quit",
-	drawable_quit_proc
-);
-
-static nil drawable_init_proc () {
+static u08 _drawable_init () {
 	DRAWABLES = vector_new ("DRAWABLES", 4);
 	at_quit_psh (&drawable_quit);
+	ret true;
 }
-
-proc_t drawable_init = PROC (
-	"Drawable.init",
-	drawable_init_proc
-);
+proc_t drawable_init = {"Drawable.init", _drawable_init};
 
 drawable_t * drawable_new (u16 size, drawable_t * params) {
 	drawable_t * drawable = malloc (size);

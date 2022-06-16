@@ -1,6 +1,6 @@
 
 MAYOR = 0
-MINOR = 3
+MINOR = 4
 PATCH = 0
 
 PLATFORM := gnu+linux
@@ -8,13 +8,13 @@ PLATFORM := gnu+linux
 ifeq ($(PLATFORM), gnu+linux)
 	INC_DIR = /usr/include
 	LIB_DIR = /usr/lib
-	LIB     = libpge.a
+	TARGET  = libpaca.a
 	CC     := cc
 else
 ifeq ($(PLATFORM), mingw)
 	INC_DIR = /usr/x86_64-w64-mingw32/include
 	LIB_DIR = /usr/x86_64-w64-mingw32/lib
-	LIB     = libpge.dll
+	TARGET  = libpaca.dll
 	CC     := x86_64-w64-mingw32-cc
 else
 all: $(error platform `$(PLATFORM)` not supported)
@@ -24,37 +24,35 @@ endif
 INSTALL_INC_DIR = $(INSTALL_DIR)$(INC_DIR)
 INSTALL_LIB_DIR = $(INSTALL_DIR)$(LIB_DIR)
 
-DIRS = $(INSTALL_INC_DIR)/pge/ \
+DIRS = $(INSTALL_INC_DIR)/paca/ \
        $(INSTALL_LIB_DIR)/
 
 SRC = $(shell find src -type f ! -name version.c)
 OBJ = $(SRC:src/%.c=lib/%.o)
-SRC_DIRS = $(shell find src -type d)
-OBJ_DIRS = lib/ $(SRC_DIRS:src%=lib%/)
 
-C_FLAGS = -O3 -Wall -pedantic
+C_FLAGS = -O3 -Wall -Wextra -pedantic -g3
 
-all: inc/version.h $(OBJ_DIRS) lib/$(LIB)
-
-%/:
-	mkdir -p $@
+all: inc/version.h lib/$(TARGET)
 
 lib/%.o: src/%.c
+	@mkdir -p $(shell dirname $@)
 	$(CC) $< -c -o $@ $(C_FLAGS)
 
-lib/$(LIB): $(OBJ)
+lib/$(TARGET): $(OBJ)
 	ar rcs $@ $(OBJ)
 
 inc/version.h: src/version.c
 	printf "`cat $<`" $(MAYOR) $(MINOR) $(PATCH) > $@
 
-install: all uninstall $(INSTALL_INC_DIR)/pge/ $(INSTALL_LIB_DIR)/
-	cp -ru inc/* $(INSTALL_INC_DIR)/pge
-	cp -ru lib/$(LIB) $(INSTALL_LIB_DIR)/$(LIB)
+install: all uninstall
+	@mkdir -p $(INSTALL_INC_DIR)/paca/
+	@mkdir -p $(INSTALL_LIB_DIR)/
+	cp -ru inc/* $(INSTALL_INC_DIR)/paca
+	cp -ru lib/$(TARGET) $(INSTALL_LIB_DIR)/$(TARGET)
 
 uninstall:
-	rm -rf $(INSTALL_INC_DIR)/pge/
-	rm -rf $(INSTALL_LIB_DIR)/$(LIB)
+	rm -rf $(INSTALL_INC_DIR)/paca/
+	rm -rf $(INSTALL_LIB_DIR)/$(TARGET)
 
 clean:
 	rm -rf lib/ inc/version.h

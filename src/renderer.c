@@ -12,7 +12,7 @@ u16 WINDOW_H;
 u08 WINDOW_DELAY;
 color_t * WINDOW_COLOR = &window_default_color;
 
-static nil _window_destroy () {
+static u08 _window_destroy () {
 	if (WINDOW) {
 		LOG ("WINDOW.destroy", 0);
 		SDL_DestroyWindow (WINDOW);
@@ -25,12 +25,9 @@ static nil _window_destroy () {
 		LOG ("TEXTURE.destroy", 0);
 		texture_free (TEXTURE);
 	}
+	ret true;
 }
-
-static proc_t window_destroy = PROC (
-	"Window.destroy",
-	_window_destroy
-);
+static proc_t window_destroy = {"Window.destroy", _window_destroy};
 
 static u08 _window_init () {
 	at_quit_psh (&window_destroy);
@@ -64,10 +61,7 @@ static u08 _window_init () {
 	
 	ret true;
 }
-proc_t window_init = PROC (
-	"Window.init",
-	_window_init
-);
+proc_t window_init = {"Window.init", _window_init};
 
 /* renderer */
 

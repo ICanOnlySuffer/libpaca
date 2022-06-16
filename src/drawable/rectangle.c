@@ -1,5 +1,5 @@
 # include "../../inc/drawable/rectangle.h"
-# include <pul/put.h>
+# include <pocha/put.h>
 
 nil rectangle_draw_lines (drawable_t * rectangle) {
 	render_set_draw_color (((struct rectangle *) rectangle) -> color);
@@ -12,7 +12,7 @@ nil rectangle_draw_full (drawable_t * rectangle) {
 }
 
 nil rectangle_free (drawable_t * rectangle) {
-	// nothing to free
+	(void) rectangle; // nothing to free
 }
 
 struct rectangle * rectangle_new (struct rectangle rectangle) {
