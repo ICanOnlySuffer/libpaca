@@ -3,7 +3,7 @@
 # define LIBPACA_DRAWABLE_H
 # include <SDL2/SDL_render.h>
 # include <pocha/vec.h>
-# include "renderer.h"
+# include "window.h"
 # include "proc.h"
 
 typedef SDL_FPoint point_t;
@@ -38,22 +38,13 @@ inl frect_t frect_from_drawable (ptr drawable) {
 	};
 }
 
-inl nil drawable_center_x (ptr drawable) {
-	((drawable_t *) drawable) -> x = (
-		WINDOW_W - ((drawable_t *) drawable) -> w
-	) / 2;
-}
+ext nil drawable_stick_x (ptr drawable);
+ext nil drawable_stick_y (ptr drawable);
+ext nil drawable_stick (ptr drawable);
 
-inl nil drawable_center_y (ptr drawable) {
-	((drawable_t *) drawable) -> y = (
-		WINDOW_H - ((drawable_t *) drawable) -> h
-	) / 2;
-}
-
-inl nil drawable_center (ptr drawable) {
-	drawable_center_x (drawable);
-	drawable_center_y (drawable);
-}
+ext nil drawable_center_x (ptr drawable);
+ext nil drawable_center_y (ptr drawable);
+ext nil drawable_center (ptr drawable);
 
 inl nil drawable_update (ptr drawable) {
 	((drawable_t *) drawable) -> x += ((drawable_t *) drawable) -> dx;
@@ -62,19 +53,11 @@ inl nil drawable_update (ptr drawable) {
 
 ext nil drawable_draw (ptr drawable);
 # define DRAWABLE_DRAW(...) \
-	arr_for_all ( \
-		ARR_LEN ((ptr []) {__VA_ARGS__}), \
-		(ptr []) {__VA_ARGS__}, \
-		(nil (*) (ptr)) drawable_draw \
-	)
+	arr_for_all (ARR (ptr, __VA_ARGS__), drawable_draw)
 
-ext nil drawable_free (drawable_t * drawable);
+ext nil drawable_free (ptr drawable);
 # define DRAWABLE_FREE(...) \
-	arr_for_all ( \
-		ARR_LEN ((ptr []) {__VA_ARGS__}), \
-		(ptr []) {__VA_ARGS__}, \
-		(nil (*) (ptr)) drawable_free \
-	)
+	arr_for_all (ARR (ptr, __VA_ARGS__), drawable_free)
 
 ext proc_t drawable_init;
 
