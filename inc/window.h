@@ -97,14 +97,10 @@ inl texture_t * texture_from_surface (surface_t * surface) {
 	return SDL_CreateTextureFromSurface (RENDERER, surface);
 }
 
-ext nil texture_free (texture_t * texture);
+ext nil texture_free (ptr texture);
 
 # define TEXTURE_FREE(...) \
-	arr_for_all ( \
-		ARR_LEN ((texture_t * []) {__VA_ARGS__}), \
-		(ptr []) {__VA_ARGS__}, \
-		(prc) texture_free \
-	)
+	arr_for_all (ARR (ptr, __VA_ARGS__), (prc) texture_free)
 
 inl texture_t * texture_new (renderer_t * renderer, u16 w, u16 h) {
 	ret SDL_CreateTexture (

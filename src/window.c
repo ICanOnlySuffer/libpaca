@@ -1,7 +1,7 @@
-# include "../inc/renderer.h"
 # include "../inc/vectors.h"
+# include "../inc/window.h"
 
-static color_t window_default_color = {0, 0, 0, 255};
+prv color_t window_default_color = {0, 0, 0, 255};
 
 window_t * WINDOW = NIL;
 renderer_t * RENDERER = NIL;
@@ -12,40 +12,40 @@ u16 WINDOW_H;
 u08 WINDOW_DELAY;
 color_t * WINDOW_COLOR = &window_default_color;
 
-static u08 _window_destroy () {
+prv u08 _window_destroy () {
 	if (WINDOW) {
-		LOG ("WINDOW.destroy", 0);
+		LOG ("WINDOW.destroy");
 		SDL_DestroyWindow (WINDOW);
 	}
 	if (RENDERER) {
-		LOG ("RENDERER.destroy", 0);
+		LOG ("RENDERER.destroy");
 		SDL_DestroyRenderer (RENDERER);
 	}
 	if (TEXTURE) {
-		LOG ("TEXTURE.destroy", 0);
+		LOG ("TEXTURE.destroy");
 		texture_free (TEXTURE);
 	}
 	ret true;
 }
-static proc_t window_destroy = {"Window.destroy", _window_destroy};
+prv proc_t window_destroy = {"Window.destroy", _window_destroy};
 
-static u08 _window_init () {
-	at_quit_psh (&window_destroy);
+prv u08 _window_init () {
+	at_quit_push (&window_destroy);
 	
 	LOG (
 		"WINDOW = Window.new \"%s\", %u, %u",
-		(u64) WINDOW_TITLE, WINDOW_W, WINDOW_H
+		WINDOW_TITLE, WINDOW_W, WINDOW_H
 	);
 	WINDOW = window_new (WINDOW_TITLE, WINDOW_W, WINDOW_H);
 	if (not WINDOW) {
-		LOG_ERR ("Window.new: %s", (u64) SDL_GetError ());
+		ERR ("Window.new: %s", SDL_GetError ());
 		ret false;
 	}
 	
 	LOG ("RENDERER = Renderer.new WINDOW", 0);
 	RENDERER = renderer_new (WINDOW);
 	if (not RENDERER) {
-		LOG_ERR ("Renderer.new: %s", (u64) SDL_GetError ());
+		ERR ("Renderer.new: %s", SDL_GetError ());
 		ret false;
 	}
 	
@@ -55,7 +55,7 @@ static u08 _window_init () {
 	);
 	TEXTURE = texture_new (RENDERER, WINDOW_W, WINDOW_H);
 	if (not TEXTURE) {
-		LOG_ERR ("Texture.new: %s", (u64) SDL_GetError ());
+		ERR ("Texture.new: %s", SDL_GetError ());
 		ret false;
 	}
 	
@@ -66,7 +66,7 @@ proc_t window_init = {"Window.init", _window_init};
 /* renderer */
 
 /* texture */
-nil texture_free (texture_t * texture) {
+nil texture_free (ptr texture) {
 	SDL_DestroyTexture (texture);
 }
 
@@ -84,7 +84,7 @@ u08 surface_extract (
 		surface_free (surface);
 		ret true;
 	} else {
-		LOG_ERR ("surface_extract: surface == NIL", 0);
+		ERR ("surface_extract: surface == NIL");
 		ret false;
 	}
 }
@@ -95,7 +95,7 @@ nil surface_replace (
 	color_t * replacement
 ) {
 	if (not surface) {
-		LOG_ERR ("surface_replace: surface == NIL", 0);
+		ERR ("surface_replace: surface == NIL");
 		ret;
 	}
 	u08 * pixels = surface -> pixels;
