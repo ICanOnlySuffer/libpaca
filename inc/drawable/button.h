@@ -10,12 +10,13 @@ struct button {
 	str string;
 	color_t * color [2];
 	font_t * font;
-	nil (* function) ();
+	proc_t proc;
+	u08 debug;
 };
 
 ext nil button_draw (drawable_t * button);
 ext nil button_free (drawable_t * button);
-ext nil button_press (struct button * button);
+ext u08 button_press (struct button * button);
 ext nil button_select (struct button * button);
 ext nil button_unselect (struct button * button);
 
@@ -26,6 +27,7 @@ ext struct button * button_new (struct button button);
 			DRAWABLE_DEFAULT, \
 			.font = FONT_DEFAULT, \
 			.string = string_, \
+			.debug = false, \
 			__VA_ARGS__ \
 		} \
 	)

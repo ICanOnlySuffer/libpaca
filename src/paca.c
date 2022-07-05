@@ -1,29 +1,29 @@
-# include "../inc/renderer.h"
 # include "../inc/drawable.h"
 # include "../inc/vectors.h"
+# include "../inc/window.h"
 # include "../inc/font.h"
 # include "../inc/paca.h"
 
 # include <SDL2/SDL_image.h>
 # include <SDL2/SDL_ttf.h>
 # include <pocha/vec.h>
-# include <pocha/put.h>
+# include <pocha/ioe.h>
 # include <SDL2/SDL.h>
 
 u08 run = true;
 
-static u08 _quit () {
+prv u08 _quit () {
 	log_proc (&vectors_at_quit);
-	LOG ("SDL.quit", 0);
+	LOG ("SDL.quit");
 	SDL_Quit ();
 	ret 1;
 }
-static proc_t quit = {"quit", _quit};
+prv proc_t quit = {"quit", _quit};
 
-static u08 _paca_init () {
-	LOG ("SDL.init", 0);
+prv u08 _paca_init () {
+	LOG ("SDL.init");
 	if (SDL_Init (SDL_INIT_VIDEO)) {
-		LOG_ERR ("SDL.init: %s", (u64) SDL_GetError ());
+		ERR ("SDL.init: %s", SDL_GetError ());
 		ret false;
 	}
 	
@@ -37,7 +37,7 @@ static u08 _paca_init () {
 	
 	ret true;
 }
-static proc_t paca_init = {"paca.init", _paca_init};
+prv proc_t paca_init = {"paca.init", _paca_init};
 
 u08 init (str title, u16 width, u16 height, u08 delay) {
 	WINDOW_TITLE = title;

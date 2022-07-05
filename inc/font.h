@@ -11,7 +11,7 @@ typedef TTF_Font font_t;
 ext font_t * FONT_DEFAULT;
 
 ext nil font_close (font_t * font);
-ext font_t * font_open (str path, u64 size);
+ext font_t * font_open (str path, u16 size);
 ext proc_t font_init;
 
 # endif // LIBPACA_FONT_H

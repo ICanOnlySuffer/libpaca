@@ -3,7 +3,7 @@
 surface_t * image_load (str path) {
 	surface_t * surface = IMG_Load (path);
 	if (not surface) {
-		LOG_ERR ("image_load: %s", (u64) SDL_GetError ());
+		ERR ("image_load: %s", SDL_GetError ());
 	}
 	ret surface;
 }
@@ -11,7 +11,7 @@ surface_t * image_load (str path) {
 texture_t * image_load_texture (str path) {
 	surface_t * surface = image_load (path);
 	if (not surface) {
-		LOG_ERR ("image_load_texture: surface == NIL", 0);
+		ERR ("image_load_texture: surface == NIL");
 		ret NIL;
 	}
 	texture_t * texture = texture_from_surface (surface);

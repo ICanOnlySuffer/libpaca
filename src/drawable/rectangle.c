@@ -1,5 +1,4 @@
 # include "../../inc/drawable/rectangle.h"
-# include <pocha/put.h>
 
 nil rectangle_draw_lines (drawable_t * rectangle) {
 	render_set_draw_color (((struct rectangle *) rectangle) -> color);

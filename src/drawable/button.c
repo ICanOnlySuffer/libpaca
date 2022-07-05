@@ -12,7 +12,7 @@ nil button_free (drawable_t * button) {
 	texture_free (((struct button *) button) -> texture);
 }
 
-static nil button_set_color (struct button * button, color_t color) {
+prv nil button_set_color (struct button * button, color_t color) {
 	if (button -> texture) {
 		texture_free (button -> texture);
 	}
@@ -32,8 +32,11 @@ nil button_unselect (struct button * button) {
 	button_set_color (button, *button -> color [0]);
 }
 
-nil button_press (struct button * button) {
-	((struct button *) button) -> function ();
+u08 button_press (struct button * button) {
+	if (button -> debug) {
+		log_proc (&button -> proc);
+	}
+	ret button -> proc.proc ();
 }
 
 struct button * button_new (struct button button) {
