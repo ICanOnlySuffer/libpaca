@@ -5,14 +5,14 @@
 # include "proc.h"
 
 ext chr LOG_SPACES [];
-ext nil log_format (u08 error, str format, u64 pointers []);
+ext nil log_format (u08 error, str format, ...);
 ext u08 log_proc (proc_t * proc);
 
-# define LOG(format_, ...) \
-	log_format (false, format_, (u64 []) {__VA_ARGS__})
+# define LOG(...) \
+	log_format (false, __VA_ARGS__)
 
-# define LOG_ERR(format_, ...) \
-	log_format (true, format_, (u64 []) {__VA_ARGS__})
+# define ERR(...) \
+	log_format (true, __VA_ARGS__)
 
 # endif // LIBPACA_LOG_H
 
