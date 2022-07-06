@@ -2,7 +2,7 @@
 # include "../inc/vectors.h"
 # include <pocha/str.h>
 
-prv vector_t DRAWABLES;
+prv vector_t * DRAWABLES = NIL;
 
 nil drawable_center_x (ptr drawable) {
 	((drawable_t *) drawable) -> x = (s16) (
@@ -42,29 +42,37 @@ nil drawable_draw (ptr drawable) {
 	((drawable_t *) drawable) -> draw ((drawable_t *) drawable);
 }
 
+prv nil drawable_free_fr (ptr drawable) {
+	LOG ("%x.free", drawable);
+	((drawable_t *) drawable) -> free ((drawable_t *) drawable);
+	free (drawable);
+}
+
 nil drawable_free (ptr drawable) {
-	LOG ("DRAWABLES.free %x", drawable);
-	if (vec_includes ((vec *) &DRAWABLES, drawable)) {
-		((drawable_t *) drawable) -> free (drawable);
-		if (run) {
-			vector_remove (&DRAWABLES, drawable);
-		}
-		free (drawable);
-	} else {
-		ERR ("not DRAWABLES.includes %x", drawable);
+	if (vector_remove (DRAWABLES, drawable)) {
+		drawable_free_fr (drawable);
 	}
 }
 
 prv u08 _drawable_quit () {
-	LOG ("DRAWABLES.for_each &:free", 0);
-	vec_for_all ((vec *) &DRAWABLES, (prc) drawable_free);
+	LOG ("DRAWABLES.for_each &:free");
+	vec_for_all ((vec *) DRAWABLES, drawable_free_fr);
+	LOG ("DRAWABLES.free");
+	vec_free ((vec *) DRAWABLES);
 	ret true;
 }
 prv proc_t drawable_quit = {"Drawable_quit", _drawable_quit};
 
 prv u08 _drawable_init () {
-	DRAWABLES = vector_new ("DRAWABLES", 4);
+	prv vector_t drawables;
+	if (DRAWABLES) {
+		ERR ("%s: \"DRAWABLES already initialized\"", __func__);
+		ret false;
+	}
+	drawables = vector_new ("DRAWABLES", 4);
+	DRAWABLES = &drawables;
 	at_quit_push (&drawable_quit);
+	
 	ret true;
 }
 proc_t drawable_init = {"Drawable.init", _drawable_init};
@@ -84,7 +92,7 @@ drawable_t * drawable_new (u16 size, drawable_t * params) {
 		drawable_stick_y (drawable);
 	}
 	
-	vector_push (&DRAWABLES, (ptr) drawable);
+	vector_push (DRAWABLES, (ptr) drawable);
 	ret drawable;
 }
 
