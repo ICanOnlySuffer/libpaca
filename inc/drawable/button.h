@@ -4,7 +4,7 @@
 # include "../drawable.h"
 # include "../font.h"
 
-struct button {
+typedef struct {
 	DRAWABLE_STRUCT;
 	texture_t * texture;
 	str string;
@@ -12,18 +12,18 @@ struct button {
 	font_t * font;
 	proc_t proc;
 	u08 debug;
-};
+} button_t;
 
-ext nil button_draw (drawable_t * button);
-ext nil button_free (drawable_t * button);
-ext u08 button_press (struct button * button);
-ext nil button_select (struct button * button);
-ext nil button_unselect (struct button * button);
+ext nil button_draw (button_t * button);
+ext nil button_free (button_t * button);
+ext u08 button_press (button_t * button);
+ext nil button_select (button_t * button);
+ext nil button_unselect (button_t * button);
 
-ext struct button * button_new (struct button button);
+ext button_t * button_new (button_t button);
 # define BUTTON_NEW(string_, ...) \
 	button_new ( \
-		(struct button) { \
+		(button_t) { \
 			DRAWABLE_DEFAULT, \
 			.font = FONT_DEFAULT, \
 			.string = string_, \

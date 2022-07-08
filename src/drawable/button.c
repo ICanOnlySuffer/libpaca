@@ -1,49 +1,49 @@
 # include "../../inc/drawable/button.h"
 # include "../../inc/drawable/text.h"
 
-nil button_draw (drawable_t * button) {
+nil button_draw (button_t * button) {
 	render_copy_f (
-		((struct button *) button) -> texture,
-		frect_from_drawable (button)
+		button -> texture,
+		frect_from_drawable ((ptr) button)
 	);
 }
 
-nil button_free (drawable_t * button) {
-	texture_free (((struct button *) button) -> texture);
+nil button_free (button_t * button) {
+	texture_free (button -> texture);
 }
 
-prv nil button_set_color (struct button * button, color_t color) {
+prv nil button_set_color (button_t * button, color_t * color) {
 	if (button -> texture) {
 		texture_free (button -> texture);
 	}
 	surface_extract (
-		text_render (button -> string, button -> font, &color),
+		text_render (button -> string, button -> font, color),
 		&button -> texture,
 		&button -> w,
 		&button -> h
 	);
 }
 
-nil button_select (struct button * button) {
-	button_set_color (button, *button -> color [1]);
+nil button_select (button_t * button) {
+	button_set_color (button, button -> color [1]);
 }
 
-nil button_unselect (struct button * button) {
-	button_set_color (button, *button -> color [0]);
+nil button_unselect (button_t * button) {
+	button_set_color (button, button -> color [0]);
 }
 
-u08 button_press (struct button * button) {
+u08 button_press (button_t * button) {
 	if (button -> debug) {
 		log_proc (&button -> proc);
 	}
 	ret button -> proc.proc ();
 }
 
-struct button * button_new (struct button button) {
+button_t * button_new (button_t button) {
 	button.texture = NIL;
 	button_unselect (&button);
-	button.draw = button_draw;
-	button.free = button_free;
-	ret (struct button *) DRAWABLE_NEW (button);
+	button.draw = (prc) button_draw;
+	button.free = (prc) button_free;
+	ret (button_t *) DRAWABLE_NEW (button);
 }
 
