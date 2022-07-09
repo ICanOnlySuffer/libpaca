@@ -4,13 +4,13 @@
 # include "../drawable.h"
 # include "../font.h"
 
-struct text {
+typedef struct {
 	DRAWABLE_STRUCT;
 	texture_t * texture;
 	str string;
 	font_t * font;
 	color_t * color;
-};
+} text_t;
 
 inl surface_t * text_render (
 	str string,
@@ -20,14 +20,14 @@ inl surface_t * text_render (
 	ret TTF_RenderText_Blended (font, string, *color);
 }
 
-ext nil text_draw (drawable_t * text);
-ext nil text_free (drawable_t * text);
-ext nil text_renew (struct text * text);
+ext nil text_draw (text_t * text);
+ext nil text_free (text_t * text);
+ext nil text_renew (text_t * text);
 
-ext struct text * text_new (struct text text);
+ext text_t * text_new (text_t text);
 # define TEXT_NEW(string_, ...) \
 	text_new ( \
-		(struct text) { \
+		(text_t) { \
 			DRAWABLE_DEFAULT, \
 			.font = FONT_DEFAULT, \
 			.string = string_, \
