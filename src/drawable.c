@@ -1,6 +1,5 @@
 # include "../inc/drawable.h"
 # include "../inc/vectors.h"
-# include <pocha/str.h>
 
 prv vector_t * DRAWABLES = NIL;
 
@@ -77,22 +76,27 @@ prv u08 _drawable_init () {
 }
 proc_t drawable_init = {"Drawable.init", _drawable_init};
 
-drawable_t * drawable_new (u16 size, drawable_t * params) {
-	drawable_t * drawable = malloc (size);
-	memcpy (drawable, params, size);
+nil drawable_update_pos (ptr drawable_) {
+	drawable_t * drawable = (drawable_t *) drawable_;
 	
 	if (drawable -> x == FLT_MAX) {
 		drawable_center_x (drawable);
 	} else if (drawable -> x == FLT_MIN) {
 		drawable_stick_x (drawable);
 	}
+	
 	if (drawable -> y == FLT_MAX) {
 		drawable_center_y (drawable);
 	} else if (drawable -> y == FLT_MIN) {
 		drawable_stick_y (drawable);
 	}
-	
+}
+
+ptr drawable_new (u16 size, drawable_t * params) {
+	drawable_t * drawable = malloc (size);
+	memcpy (drawable, params, size);
+	drawable_update_pos (drawable);
 	vector_push (DRAWABLES, (ptr) drawable);
-	ret drawable;
+	ret (ptr) drawable;
 }
 

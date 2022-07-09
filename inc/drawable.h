@@ -4,6 +4,7 @@
 # include <SDL2/SDL_render.h>
 # include <pocha/vec.h>
 # include "window.h"
+# include "color.h"
 # include "proc.h"
 
 typedef SDL_FPoint point_t;
@@ -15,10 +16,10 @@ typedef SDL_FPoint point_t;
 	f32 h; \
 	f32 dx; \
 	f32 dy; \
-	nil (* draw) (struct drawable_t * drawable); \
-	nil (* free) (struct drawable_t * drawable)
+	nil (* draw) (ptr drawable); \
+	nil (* free) (ptr drawable)
 
-typedef struct drawable_t {
+typedef struct {
 	DRAWABLE_STRUCT;
 } drawable_t;
 
@@ -61,7 +62,8 @@ ext nil drawable_free (ptr drawable);
 
 ext proc_t drawable_init;
 
-ext drawable_t * drawable_new (u16 size, drawable_t * params);
+ext nil drawable_update_pos (ptr drawable);
+ext ptr drawable_new (u16 size, drawable_t * params);
 
 # define DRAWABLE_NEW(params_) \
 	drawable_new (sizeof (params_), (drawable_t *) &params_)
