@@ -7,6 +7,7 @@
 # include <SDL2/SDL_video.h>
 # include <SDL2/SDL_image.h>
 # include <pocha/vec.h>
+# include "color.h"
 # include "paca.h"
 # include "log.h"
 
@@ -14,7 +15,6 @@ typedef SDL_Renderer renderer_t;
 typedef SDL_Surface surface_t;
 typedef SDL_Texture texture_t;
 typedef SDL_Window window_t;
-typedef SDL_Color color_t;
 typedef SDL_FRect frect_t;
 typedef SDL_Rect rect_t;
 
