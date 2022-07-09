@@ -2,6 +2,7 @@
 # ifndef LIBPACA_BUTTON_LIST_H
 # define LIBPACA_BUTTON_LIST_H
 # include "../color.h"
+# include "../proc.h"
 # include "button.h"
 
 typedef struct {
@@ -13,6 +14,11 @@ typedef struct {
 
 ext nil button_list_draw (button_list_t * button_list);
 ext nil button_list_free (button_list_t * button_list);
+
+ext nil button_list_next (button_list_t * button_list);
+ext nil button_list_previous (button_list_t * button_list);
+
+ext nil button_list_press (button_list_t * button_list);
 
 ext nil button_list_row (
 	button_list_t * button_list,
@@ -28,19 +34,21 @@ ext nil button_list_column (
 );
 
 typedef struct {
-	color_t * color [2];
-	font_t * font;
 	u08 n_buttons;
 	proc_t * procs;
+	color_t * color [2];
+	font_t * font;
 } button_list_params_t;
 
 ext button_list_t * button_list_new (button_list_params_t params);
 
-# define BUTTON_LIST_NEW(...) \
+# define BUTTON_LIST_NEW(procs_, ...) \
 	button_list_new ( \
 		(button_list_params_t) { \
+			.n_buttons = ARR_LEN (procs_), \
+			.procs = procs_, \
 			.font = FONT_DEFAULT, \
-			.color = {COLORS [1], COLOR [2]}, \
+			.color = {COLORS [1], COLORS [2]}, \
 			__VA_ARGS__ \
 		} \
 	)
