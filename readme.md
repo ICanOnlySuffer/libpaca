@@ -16,7 +16,7 @@ https://aur.archlinux.org/packages/libpaca)
 **dependencies:**
 
 - [libpocha](https://gitlab.com/ICanOnlySuffer/libpocha) (make)
-- [SDL](https://libsdl.org/download-2.0.php) (make & runtime)
+- [SDL2](https://libsdl.org/download-2.0.php) (make & runtime)
 
 **commands:**
 
